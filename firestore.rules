@@ -1,0 +1,578 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isVerifiedOwner(userId) {
+      return isSignedIn()
+        && request.auth.uid == userId
+        && request.auth.token.email_verified == true;
+    }
+
+    function isNullableString(val, maxLen) {
+      return val == null || (val is string && val.size() <= maxLen);
+    }
+
+    function isValidUserProfile(data, userId) {
+      return data.keys().hasAll([
+          'ownerId',
+          'name',
+          'reminderStyle',
+          'wakeTime',
+          'sleepTime',
+          'timezone',
+          'theme',
+          'soundEnabled',
+          'alarmTone',
+          'alarmVolume',
+          'alarmIntensity',
+          'onboardingComplete',
+          'streakDays',
+          'closedCountTotal',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'ownerId',
+          'name',
+          'email',
+          'reminderStyle',
+          'wakeTime',
+          'sleepTime',
+          'timezone',
+          'theme',
+          'soundEnabled',
+          'alarmTone',
+          'alarmVolume',
+          'alarmIntensity',
+          'audioUnlocked',
+          'onboardingComplete',
+          'streakDays',
+          'lastClosedDate',
+          'closedCountTotal',
+          'lastBriefingDate',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.ownerId is string
+        && data.ownerId.size() <= 128
+        && data.ownerId == userId
+        && data.ownerId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.name is string
+        && data.name.size() <= 80
+        && (!('email' in data) || isNullableString(data.email, 160))
+        && data.reminderStyle is string
+        && data.reminderStyle in ['gentle', 'firm']
+        && data.wakeTime is string
+        && data.wakeTime.size() == 5
+        && data.wakeTime.matches('^\\d{2}:\\d{2}$')
+        && data.sleepTime is string
+        && data.sleepTime.size() == 5
+        && data.sleepTime.matches('^\\d{2}:\\d{2}$')
+        && data.timezone is string
+        && data.timezone.size() >= 1
+        && data.timezone.size() <= 64
+        && data.theme is string
+        && data.theme in ['light', 'dark']
+        && data.soundEnabled is bool
+        && data.alarmTone is string
+        && data.alarmTone in ['bubble_pop', 'little_bell', 'sleepy_chime', 'oopsie_giggle']
+        && (data.alarmVolume is int || data.alarmVolume is float)
+        && data.alarmVolume >= 0
+        && data.alarmVolume <= 1
+        && data.alarmIntensity is string
+        && data.alarmIntensity in ['gentle', 'firm']
+        && (!('audioUnlocked' in data) || data.audioUnlocked is bool)
+        && data.onboardingComplete is bool
+        && data.streakDays is int
+        && data.streakDays >= 0
+        && data.streakDays <= 100000
+        && (!('lastClosedDate' in data) || isNullableString(data.lastClosedDate, 20))
+        && data.closedCountTotal is int
+        && data.closedCountTotal >= 0
+        && data.closedCountTotal <= 1000000
+        && (!('lastBriefingDate' in data) || isNullableString(data.lastBriefingDate, 20))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidFollowUpRule(rule) {
+      return rule is map
+        && rule.keys().hasAll(['enabled'])
+        && rule.keys().hasOnly(['enabled', 'intervalDays', 'description'])
+        && rule.enabled is bool
+        && (!('intervalDays' in rule) || rule.intervalDays == null || ((rule.intervalDays is int || rule.intervalDays is float) && rule.intervalDays >= 0 && rule.intervalDays <= 3650))
+        && (!('description' in rule) || isNullableString(rule.description, 200));
+    }
+
+    function isValidReminder(data, userId, reminderId) {
+      return data.keys().hasAll([
+          'id',
+          'ownerId',
+          'title',
+          'category',
+          'priority',
+          'dueAt',
+          'status',
+          'followUpRule',
+          'snoozeCount',
+          'lastActivityAt',
+          'reminderCreatedAt',
+          'timeline',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id',
+          'ownerId',
+          'title',
+          'person',
+          'project',
+          'category',
+          'priority',
+          'dueAt',
+          'status',
+          'followUpRule',
+          'snoozeCount',
+          'lastNotifiedAt',
+          'lastActivityAt',
+          'reminderCreatedAt',
+          'closedAt',
+          'timeline',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.id is string
+        && data.id.size() <= 128
+        && data.id == reminderId
+        && data.id.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.ownerId is string
+        && data.ownerId.size() <= 128
+        && data.ownerId == userId
+        && data.ownerId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.title is string
+        && data.title.size() >= 1
+        && data.title.size() <= 280
+        && (!('person' in data) || isNullableString(data.person, 120))
+        && (!('project' in data) || isNullableString(data.project, 120))
+        && data.category is string
+        && data.category in ['Work', 'Personal', 'Finance', 'Health', 'Errands', 'Social']
+        && data.priority is string
+        && data.priority in ['low', 'medium', 'high']
+        && data.dueAt is string
+        && data.dueAt.size() >= 1
+        && data.dueAt.size() <= 64
+        && data.status is string
+        && data.status in ['needs_action', 'waiting', 'closed']
+        && isValidFollowUpRule(data.followUpRule)
+        && data.snoozeCount is int
+        && data.snoozeCount >= 0
+        && data.snoozeCount <= 10000
+        && (!('lastNotifiedAt' in data) || isNullableString(data.lastNotifiedAt, 64))
+        && data.lastActivityAt is string
+        && data.lastActivityAt.size() <= 64
+        && data.reminderCreatedAt is string
+        && data.reminderCreatedAt.size() <= 64
+        && (!('closedAt' in data) || isNullableString(data.closedAt, 64))
+        && data.timeline is list
+        && data.timeline.size() <= 200
+        && (data.timeline.size() == 0 || (data.timeline[0] is map && data.timeline[0].keys().hasAll(['id', 'type', 'text', 'timestamp'])))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidSecuritySession(data, userId, sessionId) {
+      return data.keys().hasAll([
+          'id',
+          'ownerId',
+          'deviceLabel',
+          'browserSummary',
+          'revoked',
+          'lastActiveAt',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id',
+          'ownerId',
+          'deviceLabel',
+          'browserSummary',
+          'revoked',
+          'lastActiveAt',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.id is string
+        && data.id == sessionId
+        && data.id.size() <= 128
+        && data.id.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.ownerId is string
+        && data.ownerId == userId
+        && data.ownerId.size() <= 128
+        && data.ownerId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.deviceLabel is string
+        && data.deviceLabel.size() >= 1
+        && data.deviceLabel.size() <= 120
+        && data.browserSummary is string
+        && data.browserSummary.size() <= 160
+        && data.revoked is bool
+        && data.lastActiveAt is string
+        && data.lastActiveAt.size() <= 64
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidPrivacySettings(data, userId, settingId) {
+      return settingId == 'config'
+        && data.keys().hasAll([
+          'id',
+          'ownerId',
+          'aiAnalysisPaused',
+          'gmailSyncPaused',
+          'calendarSyncPaused',
+          'keyVersion',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id',
+          'ownerId',
+          'aiAnalysisPaused',
+          'gmailSyncPaused',
+          'calendarSyncPaused',
+          'keyVersion',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.id is string
+        && data.id == 'config'
+        && data.id.size() <= 32
+        && data.ownerId is string
+        && data.ownerId == userId
+        && data.ownerId.size() <= 128
+        && data.ownerId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.aiAnalysisPaused is bool
+        && data.gmailSyncPaused is bool
+        && data.calendarSyncPaused is bool
+        && data.keyVersion is int
+        && data.keyVersion >= 1
+        && data.keyVersion <= 100000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidAuditLog(data, userId, logId) {
+      return data.keys().hasAll([
+          'id',
+          'ownerId',
+          'eventType',
+          'summary',
+          'severity',
+          'deviceLabel',
+          'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'id',
+          'ownerId',
+          'eventType',
+          'summary',
+          'severity',
+          'deviceLabel',
+          'createdAt'
+        ])
+        && data.id is string
+        && data.id == logId
+        && data.id.size() <= 128
+        && data.id.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.ownerId is string
+        && data.ownerId == userId
+        && data.ownerId.size() <= 128
+        && data.ownerId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.eventType is string
+        && data.eventType in [
+          'login_success',
+          'session_revoked',
+          'logout_all',
+          'integration_connected',
+          'integration_disconnected',
+          'data_exported',
+          'data_deleted',
+          'key_rotated',
+          'ai_privacy_updated',
+          'account_deleted',
+          'security_warning'
+        ]
+        && data.summary is string
+        && data.summary.size() >= 1
+        && data.summary.size() <= 240
+        && data.severity is string
+        && data.severity in ['info', 'warning', 'critical']
+        && data.deviceLabel is string
+        && data.deviceLabel.size() <= 120
+        && data.createdAt is timestamp;
+    }
+
+    function isValidEncryptedContact(data, userId, contactId) {
+      return data.keys().hasAll([
+          'id',
+          'ownerId',
+          'encryptedPayload',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id',
+          'ownerId',
+          'encryptedPayload',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.id is string
+        && data.id == contactId
+        && data.id.size() <= 128
+        && data.id.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.ownerId is string
+        && data.ownerId == userId
+        && data.ownerId.size() <= 128
+        && data.ownerId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.encryptedPayload is string
+        && data.encryptedPayload.size() >= 2
+        && data.encryptedPayload.size() <= 16000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    match /users/{userId} {
+      allow get: if isValidId(userId) && isVerifiedOwner(userId);
+      allow list: if false;
+      allow create: if isValidId(userId)
+        && isVerifiedOwner(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(userId)
+        && isVerifiedOwner(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().ownerId == existing().ownerId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          incoming().diff(existing()).affectedKeys().hasOnly([
+            'name',
+            'email',
+            'reminderStyle',
+            'wakeTime',
+            'sleepTime',
+            'timezone',
+            'theme',
+            'soundEnabled',
+            'alarmTone',
+            'alarmVolume',
+            'alarmIntensity',
+            'audioUnlocked',
+            'onboardingComplete',
+            'streakDays',
+            'lastClosedDate',
+            'closedCountTotal',
+            'lastBriefingDate',
+            'updatedAt'
+          ])
+        );
+      allow delete: if isValidId(userId) && isVerifiedOwner(userId);
+
+      match /reminders/{reminderId} {
+        allow get: if isValidId(userId)
+          && isValidId(reminderId)
+          && isVerifiedOwner(userId)
+          && (resource == null || existing().ownerId == request.auth.uid);
+        allow list: if isVerifiedOwner(userId)
+          && resource.data.ownerId == request.auth.uid;
+        allow create: if isValidId(userId)
+          && isValidId(reminderId)
+          && isVerifiedOwner(userId)
+          && isValidReminder(incoming(), userId, reminderId)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && exists(/databases/$(database)/documents/users/$(userId));
+        allow update: if isValidId(userId)
+          && isValidId(reminderId)
+          && isVerifiedOwner(userId)
+          && isValidReminder(incoming(), userId, reminderId)
+          && incoming().id == existing().id
+          && incoming().ownerId == existing().ownerId
+          && incoming().reminderCreatedAt == existing().reminderCreatedAt
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && existing().ownerId == request.auth.uid
+          && (
+            incoming().diff(existing()).affectedKeys().hasOnly([
+              'title',
+              'person',
+              'project',
+              'category',
+              'priority',
+              'dueAt',
+              'status',
+              'followUpRule',
+              'snoozeCount',
+              'lastNotifiedAt',
+              'lastActivityAt',
+              'closedAt',
+              'timeline',
+              'updatedAt'
+            ])
+          );
+        allow delete: if isValidId(userId)
+          && isValidId(reminderId)
+          && isVerifiedOwner(userId)
+          && existing().ownerId == request.auth.uid;
+      }
+
+      match /sessions/{sessionId} {
+        allow get: if isValidId(userId)
+          && isValidId(sessionId)
+          && isVerifiedOwner(userId)
+          && (resource == null || existing().ownerId == request.auth.uid);
+        allow list: if isVerifiedOwner(userId)
+          && resource.data.ownerId == request.auth.uid;
+        allow create: if isValidId(userId)
+          && isValidId(sessionId)
+          && isVerifiedOwner(userId)
+          && isValidSecuritySession(incoming(), userId, sessionId)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && exists(/databases/$(database)/documents/users/$(userId));
+        allow update: if isValidId(userId)
+          && isValidId(sessionId)
+          && isVerifiedOwner(userId)
+          && isValidSecuritySession(incoming(), userId, sessionId)
+          && incoming().id == existing().id
+          && incoming().ownerId == existing().ownerId
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && existing().ownerId == request.auth.uid
+          && (
+            incoming().diff(existing()).affectedKeys().hasOnly([
+              'revoked',
+              'lastActiveAt',
+              'browserSummary',
+              'updatedAt'
+            ])
+          );
+        allow delete: if isValidId(userId)
+          && isValidId(sessionId)
+          && isVerifiedOwner(userId)
+          && existing().ownerId == request.auth.uid;
+      }
+
+      match /privacySettings/{settingId} {
+        allow get: if isValidId(userId)
+          && isValidId(settingId)
+          && isVerifiedOwner(userId)
+          && (resource == null || existing().ownerId == request.auth.uid);
+        allow list: if false;
+        allow create: if isValidId(userId)
+          && isValidId(settingId)
+          && isVerifiedOwner(userId)
+          && isValidPrivacySettings(incoming(), userId, settingId)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && exists(/databases/$(database)/documents/users/$(userId));
+        allow update: if isValidId(userId)
+          && isValidId(settingId)
+          && isVerifiedOwner(userId)
+          && isValidPrivacySettings(incoming(), userId, settingId)
+          && incoming().id == existing().id
+          && incoming().ownerId == existing().ownerId
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && existing().ownerId == request.auth.uid
+          && (
+            incoming().diff(existing()).affectedKeys().hasOnly([
+              'aiAnalysisPaused',
+              'gmailSyncPaused',
+              'calendarSyncPaused',
+              'keyVersion',
+              'updatedAt'
+            ])
+          );
+        allow delete: if isValidId(userId)
+          && isValidId(settingId)
+          && isVerifiedOwner(userId)
+          && existing().ownerId == request.auth.uid;
+      }
+
+      match /auditLogs/{logId} {
+        allow get: if isValidId(userId)
+          && isValidId(logId)
+          && isVerifiedOwner(userId)
+          && (resource == null || existing().ownerId == request.auth.uid);
+        allow list: if isVerifiedOwner(userId)
+          && resource.data.ownerId == request.auth.uid;
+        allow create: if isValidId(userId)
+          && isValidId(logId)
+          && isVerifiedOwner(userId)
+          && isValidAuditLog(incoming(), userId, logId)
+          && incoming().createdAt == request.time
+          && exists(/databases/$(database)/documents/users/$(userId));
+        // Immutable append-only audit logs: normal users cannot modify or delete audit entries
+        allow update: if false;
+        allow delete: if false;
+      }
+
+      match /contacts/{contactId} {
+        allow get: if isValidId(userId)
+          && isValidId(contactId)
+          && isVerifiedOwner(userId)
+          && (resource == null || existing().ownerId == request.auth.uid);
+        allow list: if isVerifiedOwner(userId)
+          && resource.data.ownerId == request.auth.uid;
+        allow create: if isValidId(userId)
+          && isValidId(contactId)
+          && isVerifiedOwner(userId)
+          && isValidEncryptedContact(incoming(), userId, contactId)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && exists(/databases/$(database)/documents/users/$(userId));
+        allow update: if isValidId(userId)
+          && isValidId(contactId)
+          && isVerifiedOwner(userId)
+          && isValidEncryptedContact(incoming(), userId, contactId)
+          && incoming().id == existing().id
+          && incoming().ownerId == existing().ownerId
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && existing().ownerId == request.auth.uid
+          && (
+            incoming().diff(existing()).affectedKeys().hasOnly([
+              'encryptedPayload',
+              'updatedAt'
+            ])
+          );
+        allow delete: if isValidId(userId)
+          && isValidId(contactId)
+          && isVerifiedOwner(userId)
+          && existing().ownerId == request.auth.uid;
+      }
+    }
+  }
+}

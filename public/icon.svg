@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <rect width="512" height="512" rx="112" fill="#FFFBF4"/>
+  <!-- Sticky-note body -->
+  <path d="M96 108C96 86 114 68 136 68H376C398 68 416 86 416 108V346L330 432H136C114 432 96 414 96 392V108Z" fill="#FFE066" stroke="#16213E" stroke-width="18" stroke-linejoin="round"/>
+  <!-- Coral folded corner -->
+  <path d="M330 432V362C330 352 338 344 348 344H416L330 432Z" fill="#F25F5C" stroke="#16213E" stroke-width="16" stroke-linejoin="round"/>
+  <!-- Rosy cheeks -->
+  <ellipse cx="164" cy="264" rx="22" ry="13" fill="#F25F5C" fill-opacity="0.45"/>
+  <ellipse cx="348" cy="264" rx="22" ry="13" fill="#F25F5C" fill-opacity="0.45"/>
+  <!-- Friendly eyes -->
+  <circle cx="196" cy="224" r="22" fill="#16213E"/>
+  <circle cx="189" cy="216" r="7" fill="#FFFFFF"/>
+  <circle cx="316" cy="224" r="22" fill="#16213E"/>
+  <circle cx="309" cy="216" r="7" fill="#FFFFFF"/>
+  <!-- Playful smile -->
+  <path d="M214 282C232 308 280 308 298 282" stroke="#16213E" stroke-width="18" stroke-linecap="round"/>
+</svg>

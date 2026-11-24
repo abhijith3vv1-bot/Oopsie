@@ -1,0 +1,6 @@
+{
+  "name": "The Reminder",
+  "description": "A warm, thoughtful personal second brain that remembers everything for you, checks in at the right moment, and follows up until every loop is closed.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

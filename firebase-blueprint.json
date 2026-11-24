@@ -1,0 +1,436 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Private user settings, notification preferences, streak stats, and Oopsie onboarding state.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the profile owner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Preferred display name.",
+          "maxLength": 80
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Verified Google account email (private to owner).",
+          "maxLength": 160
+        },
+        "reminderStyle": {
+          "type": "string",
+          "enum": ["gentle", "firm"]
+        },
+        "wakeTime": {
+          "type": "string",
+          "maxLength": 5,
+          "pattern": "^\\d{2}:\\d{2}$"
+        },
+        "sleepTime": {
+          "type": "string",
+          "maxLength": 5,
+          "pattern": "^\\d{2}:\\d{2}$"
+        },
+        "timezone": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "theme": {
+          "type": "string",
+          "enum": ["light", "dark"]
+        },
+        "soundEnabled": {
+          "type": "boolean"
+        },
+        "alarmTone": {
+          "type": "string",
+          "enum": ["bubble_pop", "little_bell", "sleepy_chime", "oopsie_giggle"]
+        },
+        "alarmVolume": {
+          "type": "number"
+        },
+        "alarmIntensity": {
+          "type": "string",
+          "enum": ["gentle", "firm"]
+        },
+        "audioUnlocked": {
+          "type": "boolean"
+        },
+        "onboardingComplete": {
+          "type": "boolean"
+        },
+        "streakDays": {
+          "type": "integer"
+        },
+        "lastClosedDate": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "closedCountTotal": {
+          "type": "integer"
+        },
+        "lastBriefingDate": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "ownerId",
+        "name",
+        "reminderStyle",
+        "wakeTime",
+        "sleepTime",
+        "timezone",
+        "theme",
+        "soundEnabled",
+        "alarmTone",
+        "alarmVolume",
+        "alarmIntensity",
+        "onboardingComplete",
+        "streakDays",
+        "closedCountTotal",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Reminder": {
+      "title": "Reminder",
+      "description": "A user reminder item with follow-up rules and chronological update timeline.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 280
+        },
+        "person": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "project": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "category": {
+          "type": "string",
+          "enum": ["Work", "Personal", "Finance", "Health", "Errands", "Social"]
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "dueAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "status": {
+          "type": "string",
+          "enum": ["needs_action", "waiting", "closed"]
+        },
+        "followUpRule": {
+          "type": "object"
+        },
+        "snoozeCount": {
+          "type": "integer"
+        },
+        "lastNotifiedAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "lastActivityAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "reminderCreatedAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "closedAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "timeline": {
+          "type": "array"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "title",
+        "category",
+        "priority",
+        "dueAt",
+        "status",
+        "followUpRule",
+        "snoozeCount",
+        "lastActivityAt",
+        "reminderCreatedAt",
+        "timeline",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "SecuritySession": {
+      "title": "SecuritySession",
+      "description": "Active or revoked device session owned by a verified user.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "deviceLabel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "browserSummary": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "revoked": {
+          "type": "boolean"
+        },
+        "lastActiveAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "deviceLabel",
+        "browserSummary",
+        "revoked",
+        "lastActiveAt",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PrivacySettings": {
+      "title": "PrivacySettings",
+      "description": "User privacy and AI processing control flags.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "aiAnalysisPaused": {
+          "type": "boolean"
+        },
+        "gmailSyncPaused": {
+          "type": "boolean"
+        },
+        "calendarSyncPaused": {
+          "type": "boolean"
+        },
+        "keyVersion": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "aiAnalysisPaused",
+        "gmailSyncPaused",
+        "calendarSyncPaused",
+        "keyVersion",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Immutable, append-only security audit trail scoped to the account owner (no tokens, passwords, or private conversation bodies).",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "eventType": {
+          "type": "string",
+          "enum": [
+            "login_success",
+            "session_revoked",
+            "logout_all",
+            "integration_connected",
+            "integration_disconnected",
+            "data_exported",
+            "data_deleted",
+            "key_rotated",
+            "ai_privacy_updated",
+            "account_deleted",
+            "security_warning"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["info", "warning", "critical"]
+        },
+        "deviceLabel": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "eventType",
+        "summary",
+        "severity",
+        "deviceLabel",
+        "createdAt"
+      ]
+    },
+    "EncryptedContact": {
+      "title": "EncryptedContact",
+      "description": "Owner-isolated contact profile with AES-256-GCM encrypted PII payload.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "encryptedPayload": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 16000
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "encryptedPayload",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user profile and preferences scoped strictly to the signed-in Google user."
+    },
+    "/users/{userId}/reminders/{reminderId}": {
+      "schema": { "$ref": "#/entities/Reminder" },
+      "description": "User's personal reminders and chronological follow-up timelines."
+    },
+    "/users/{userId}/sessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/SecuritySession" },
+      "description": "Active and revoked sessions for device session visibility and remote sign-out."
+    },
+    "/users/{userId}/privacySettings/{settingId}": {
+      "schema": { "$ref": "#/entities/PrivacySettings" },
+      "description": "User-controlled AI privacy and integration synchronization pauses."
+    },
+    "/users/{userId}/auditLogs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "Append-only security event log immutable to normal users."
+    },
+    "/users/{userId}/contacts/{contactId}": {
+      "schema": { "$ref": "#/entities/EncryptedContact" },
+      "description": "Owner-isolated encrypted contact metadata."
+    }
+  }
+}
