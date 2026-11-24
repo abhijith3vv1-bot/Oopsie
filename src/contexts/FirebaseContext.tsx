@@ -112,6 +112,33 @@ function getOrCreateSessionId(): string {
   }
 }
 
+function formatFirebasePopupError(err: unknown, fallback: string, isVerification = false): string {
+  const code =
+    typeof err === 'object' && err !== null && 'code' in err
+      ? String((err as { code?: unknown }).code || '')
+      : '';
+  const msg = err instanceof Error ? err.message : fallback;
+
+  if (code === 'auth/unauthorized-domain' || msg.includes('unauthorized-domain')) {
+    const host = typeof window !== 'undefined' && window.location.hostname ? window.location.hostname : 'this domain';
+    return `This domain (${host}) isn't authorized for Google sign-in yet. Add "${host}" in Firebase Console → Authentication → Settings → Authorized domains, then try again.`;
+  }
+  if (code === 'auth/popup-closed-by-user' || msg.includes('popup-closed-by-user')) {
+    return isVerification
+      ? 'Verification popup was closed before completing.'
+      : 'Sign-in popup was closed before completing. Tap again whenever you are ready.';
+  }
+  if (code === 'auth/popup-blocked' || msg.includes('popup-blocked')) {
+    return isVerification
+      ? 'Popup was blocked by your browser. Allow popups to verify your identity.'
+      : 'Your browser blocked the Google sign-in popup. Please allow popups for this site and try again.';
+  }
+  if (code === 'auth/cancelled-popup-request' || msg.includes('cancelled-popup-request')) {
+    return 'A previous sign-in window was still open. Please try again.';
+  }
+  return msg || fallback;
+}
+
 const FirebaseContext = createContext<FirebaseContextValue | null>(null);
 
 export function FirebaseProvider({ children }: { children: ReactNode }) {
@@ -269,18 +296,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
       }
       return result.user;
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Google sign-in could not be completed.';
-      if (msg.includes('popup-closed-by-user')) {
-        setAuthError(
-          'Sign-in popup was closed before completing. Tap again whenever you are ready.'
-        );
-      } else if (msg.includes('popup-blocked')) {
-        setAuthError(
-          'Your browser blocked the Google sign-in popup. Please allow popups for this site and try again.'
-        );
-      } else {
-        setAuthError(msg);
-      }
+      setAuthError(formatFirebasePopupError(err, 'Google sign-in could not be completed.'));
       return null;
     } finally {
       setIsSigningIn(false);
@@ -298,14 +314,9 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
       setLastReauthAt(Date.now());
       return true;
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Re-authentication could not be completed.';
-      if (msg.includes('popup-closed-by-user')) {
-        setAuthError('Verification popup was closed before completing.');
-      } else if (msg.includes('popup-blocked')) {
-        setAuthError('Popup was blocked by your browser. Allow popups to verify your identity.');
-      } else {
-        setAuthError(msg);
-      }
+      setAuthError(
+        formatFirebasePopupError(err, 'Re-authentication could not be completed.', true)
+      );
       return false;
     }
   };
@@ -338,17 +349,9 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
       }
       return { accessToken, email };
     } catch (err) {
-      const msg =
-        err instanceof Error ? err.message : 'Could not authorize Google Workspace access.';
-      if (msg.includes('popup-closed-by-user')) {
-        setWorkspaceAuthError('Permission popup was closed before completing.');
-      } else if (msg.includes('popup-blocked')) {
-        setWorkspaceAuthError(
-          'Popup was blocked by your browser. Please allow popups for this site and try again.'
-        );
-      } else {
-        setWorkspaceAuthError(msg);
-      }
+      setWorkspaceAuthError(
+        formatFirebasePopupError(err, 'Could not authorize Google Workspace access.')
+      );
       return null;
     } finally {
       setIsConnectingWorkspace(false);
