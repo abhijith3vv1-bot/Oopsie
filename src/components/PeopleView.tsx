@@ -132,17 +132,17 @@ export function PeopleView({
               setSelectedKey(null);
               setEditingProfile(false);
             }}
-            className="min-h-[40px] inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold text-[#666173] dark:text-[#A7A2B8] hover:text-[#24212B] dark:hover:text-[#F5F3FA] hover:bg-white dark:hover:bg-[#1A1726] transition-colors"
+            className="min-h-[44px] sm:min-h-[40px] inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold text-[#666173] dark:text-[#A7A2B8] hover:text-[#24212B] dark:hover:text-[#F5F3FA] hover:bg-white dark:hover:bg-[#1A1726] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>All people</span>
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={() => openEditProfile(activePerson.contact)}
-              className="min-h-[40px] inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] text-xs font-semibold text-[#24212B] dark:text-[#F5F3FA] hover:border-[#7657D5]/60"
+              className="min-h-[44px] sm:min-h-[40px] inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] text-xs font-semibold text-[#24212B] dark:text-[#F5F3FA] hover:border-[#7657D5]/60"
             >
               <Pencil className="w-3.5 h-3.5" />
               <span>Edit info</span>
@@ -150,26 +150,26 @@ export function PeopleView({
             <button
               type="button"
               onClick={() => onAddReminderForPerson(activePerson.name)}
-              className="min-h-[40px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#7657D5] hover:bg-[#6445C5] text-white text-xs font-semibold"
+              className="min-h-[44px] sm:min-h-[40px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#7657D5] hover:bg-[#6445C5] text-white text-xs font-semibold"
             >
               <Plus className="w-4 h-4" />
-              <span>Follow up with {activePerson.name}</span>
+              <span className="truncate max-w-[180px] sm:max-w-none">Follow up with {activePerson.name}</span>
             </button>
           </div>
         </div>
 
         {/* Contact Profile Header */}
-        <div className="rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-5 sm:p-6 space-y-5">
+        <div className="rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-4 sm:p-6 space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
               <span className="w-14 h-14 rounded-2xl bg-[#EAE4FF] dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF] text-lg font-bold flex items-center justify-center shrink-0">
                 {getPersonInitials(activePerson.name) || activePerson.name.slice(0, 2).toUpperCase()}
               </span>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold font-display text-[#24212B] dark:text-[#F5F3FA]">
+              <div className="min-w-0">
+                <h1 className="text-xl sm:text-2xl font-bold font-display text-[#24212B] dark:text-[#F5F3FA] truncate">
                   {activePerson.name}
                 </h1>
-                <p className="text-sm text-[#666173] dark:text-[#A7A2B8]">
+                <p className="text-sm text-[#666173] dark:text-[#A7A2B8] truncate">
                   {[activePerson.contact.role, activePerson.contact.company]
                     .filter(Boolean)
                     .join(' · ') || 'Contact profile'}
@@ -177,26 +177,26 @@ export function PeopleView({
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 sm:text-right">
-              <div>
+            <div className="grid grid-cols-3 gap-3 sm:gap-4 sm:text-right">
+              <div className="min-w-0">
                 <p className="text-lg font-bold font-mono tabular-nums text-[#7657D5] dark:text-[#C5B4FF]">
                   {activePerson.pendingItems.length}
                 </p>
                 <p className="text-[11px] text-[#666173] dark:text-[#A7A2B8]">Pending</p>
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-lg font-bold font-mono tabular-nums text-emerald-600 dark:text-emerald-400">
                   {activePerson.completedItems.length}
                 </p>
                 <p className="text-[11px] text-[#666173] dark:text-[#A7A2B8]">Completed</p>
               </div>
-              <div>
-                <p className="text-xs font-semibold font-mono tabular-nums text-[#24212B] dark:text-[#F5F3FA] mt-1">
+              <div className="min-w-0">
+                <p className="text-xs font-semibold font-mono tabular-nums text-[#24212B] dark:text-[#F5F3FA] mt-1 truncate">
                   {activePerson.lastInteractionAt
                     ? formatTimelineTimestamp(activePerson.lastInteractionAt)
                     : 'No activity'}
                 </p>
-                <p className="text-[11px] text-[#666173] dark:text-[#A7A2B8]">Last interaction</p>
+                <p className="text-[11px] text-[#666173] dark:text-[#A7A2B8]">Last activity</p>
               </div>
             </div>
           </div>
@@ -343,12 +343,12 @@ export function PeopleView({
                   value={newCommitment}
                   onChange={(e) => setNewCommitment(e.target.value)}
                   placeholder="Pin a promise or commitment..."
-                  className="flex-1 h-9 px-3 rounded-xl bg-[#FAF9FC] dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] text-xs"
+                  className="flex-1 min-w-0 h-11 sm:h-9 px-3 rounded-xl bg-[#FAF9FC] dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] text-xs"
                 />
                 <button
                   type="submit"
                   disabled={!newCommitment.trim()}
-                  className="min-h-[36px] px-3 rounded-xl bg-[#EAE4FF] dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF] disabled:opacity-40 text-xs font-semibold"
+                  className="min-h-[44px] sm:min-h-[36px] px-3.5 rounded-xl bg-[#EAE4FF] dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF] disabled:opacity-40 text-xs font-semibold shrink-0"
                 >
                   Pin
                 </button>
@@ -598,18 +598,18 @@ export function PeopleView({
                   )}
                 </div>
 
-                <div className="flex items-center justify-between pt-2 border-t border-[#EFEBF7] dark:border-[#2C2740]">
+                <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#EFEBF7] dark:border-[#2C2740]">
                   <button
                     type="button"
                     onClick={() => setSelectedKey(person.key)}
-                    className="text-xs font-semibold text-[#7657D5] dark:text-[#C5B4FF] hover:underline"
+                    className="min-h-[44px] sm:min-h-[34px] inline-flex items-center text-xs font-semibold text-[#7657D5] dark:text-[#C5B4FF] hover:underline"
                   >
                     View profile &amp; history
                   </button>
                   <button
                     type="button"
                     onClick={() => onAddReminderForPerson(person.name)}
-                    className="min-h-[34px] inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#EAE4FF]/70 dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF] hover:bg-[#7657D5] hover:text-white text-xs font-semibold transition-colors"
+                    className="min-h-[44px] sm:min-h-[34px] inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#EAE4FF]/70 dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF] hover:bg-[#7657D5] hover:text-white text-xs font-semibold transition-colors shrink-0"
                   >
                     <Sparkles className="w-3 h-3" />
                     <span>Follow up</span>

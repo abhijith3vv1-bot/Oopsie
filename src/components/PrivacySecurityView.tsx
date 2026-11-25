@@ -897,9 +897,9 @@ export function PrivacySecurityView({
             type="button"
             disabled={busyAction !== null}
             onClick={() => void handleRotateEncryptionKey()}
-            className="min-h-[40px] inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#EAE4FF] hover:bg-[#DDD3FA] dark:bg-[#2B2444] dark:hover:bg-[#382F58] text-[#4C32A8] dark:text-[#EAE4FF] text-xs font-semibold transition-colors"
+            className="min-h-[44px] inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#EAE4FF] hover:bg-[#DDD3FA] dark:bg-[#2B2444] dark:hover:bg-[#382F58] text-[#4C32A8] dark:text-[#EAE4FF] text-xs font-semibold transition-colors"
           >
-            <KeyRound className="w-4 h-4" />
+            <KeyRound className="w-4 h-4 shrink-0" />
             <span>
               {busyAction === 'rotate_key'
                 ? 'Rotating key...'
@@ -911,9 +911,9 @@ export function PrivacySecurityView({
             type="button"
             disabled={busyAction !== null}
             onClick={() => void handleExportAllPersonalData()}
-            className="min-h-[40px] inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-[#FAF9FC] dark:bg-[#12101A] hover:border-[#7657D5] text-xs font-semibold text-[#24212B] dark:text-[#F5F3FA] transition-colors"
+            className="min-h-[44px] inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-[#FAF9FC] dark:bg-[#12101A] hover:border-[#7657D5] text-xs font-semibold text-[#24212B] dark:text-[#F5F3FA] transition-colors"
           >
-            <Download className="w-4 h-4 text-[#7657D5]" />
+            <Download className="w-4 h-4 text-[#7657D5] shrink-0" />
             <span>
               {busyAction === 'export_data' ? 'Preparing export...' : 'Export Personal Data (Re-auth)'}
             </span>
@@ -926,9 +926,9 @@ export function PrivacySecurityView({
             type="button"
             disabled={busyAction !== null}
             onClick={() => setConfirmDialog('delete_connect')}
-            className="min-h-[38px] inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900/60 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30"
+            className="min-h-[44px] sm:min-h-[38px] inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900/60 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30"
           >
-            <Trash2 className="w-3.5 h-3.5" />
+            <Trash2 className="w-3.5 h-3.5 shrink-0" />
             <span>Delete Conversations &amp; Email Cache</span>
           </button>
 
@@ -936,9 +936,9 @@ export function PrivacySecurityView({
             type="button"
             disabled={busyAction !== null}
             onClick={() => setConfirmDialog('delete_contacts')}
-            className="min-h-[38px] inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900/60 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30"
+            className="min-h-[44px] sm:min-h-[38px] inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900/60 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30"
           >
-            <Users className="w-3.5 h-3.5" />
+            <Users className="w-3.5 h-3.5 shrink-0" />
             <span>Delete All Contacts</span>
           </button>
 
@@ -947,9 +947,9 @@ export function PrivacySecurityView({
               type="button"
               disabled={busyAction !== null}
               onClick={() => setConfirmDialog('delete_account')}
-              className="min-h-[38px] inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-xs font-semibold text-white ml-auto"
+              className="w-full sm:w-auto sm:ml-auto min-h-[44px] sm:min-h-[38px] inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-xs font-semibold text-white"
             >
-              <Trash2 className="w-3.5 h-3.5" />
+              <Trash2 className="w-3.5 h-3.5 shrink-0" />
               <span>Delete Account &amp; All Data</span>
             </button>
           )}
@@ -958,8 +958,8 @@ export function PrivacySecurityView({
 
       {/* 4. AI Privacy */}
       <section className="rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-5 sm:p-6 space-y-4">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start sm:items-center gap-2.5">
             <span className="w-9 h-9 rounded-xl bg-[#EAE4FF] dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF] flex items-center justify-center shrink-0">
               <Bot className="w-4 h-4" />
             </span>
@@ -977,7 +977,7 @@ export function PrivacySecurityView({
             type="button"
             disabled={busyAction !== null}
             onClick={() => void handleTogglePrivacyFlag('aiAnalysisPaused', !aiPaused)}
-            className={`min-h-[40px] inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-colors shrink-0 ${
+            className={`w-full sm:w-auto min-h-[44px] sm:min-h-[40px] inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-colors shrink-0 ${
               aiPaused
                 ? 'bg-amber-100 dark:bg-amber-950/50 text-amber-800 dark:text-amber-200 border border-amber-300 dark:border-amber-800'
                 : 'bg-[#7657D5] hover:bg-[#6546C4] text-white'

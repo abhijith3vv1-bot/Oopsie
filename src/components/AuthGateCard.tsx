@@ -6,8 +6,8 @@ export function AuthGateCard() {
   const { isSigningIn, authError, signInWithGoogle, enterGuestMode } = useFirebaseAuth();
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-[#FAF9FC] dark:bg-[#12101A] text-[#24212B] dark:text-[#F5F3FA]">
-      <div className="w-full max-w-md rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-7 sm:p-8 shadow-sm space-y-6 text-center">
+    <div className="min-h-[100dvh] flex items-center justify-center px-4 pt-[max(2rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))] bg-[#FAF9FC] dark:bg-[#12101A] text-[#24212B] dark:text-[#F5F3FA]">
+      <div className="w-full max-w-md rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-6 sm:p-8 shadow-sm space-y-6 text-center">
         <div className="flex flex-col items-center gap-3">
           <AssistantOrb mood="happy" size="lg" />
           <div className="space-y-1">

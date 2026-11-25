@@ -366,7 +366,7 @@ export function BrainView({
                 type="button"
                 onClick={() => handleAsk(lastAskedQuery)}
                 disabled={asking}
-                className="min-h-[34px] inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#7657D5] hover:bg-[#6445C5] text-white text-xs font-medium whitespace-nowrap shrink-0"
+                className="min-h-[44px] sm:min-h-[34px] inline-flex items-center gap-1.5 px-3.5 py-1 rounded-xl bg-[#7657D5] hover:bg-[#6445C5] text-white text-xs font-medium whitespace-nowrap shrink-0"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 <span>Retry</span>
@@ -388,12 +388,12 @@ export function BrainView({
                         onClick={() => onOpenTimeline(ci)}
                         className="w-full text-left rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-3 hover:border-[#7657D5] transition-colors space-y-1"
                       >
-                        <div className="flex items-center justify-between gap-2">
+                        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-0.5">
                           <span className="text-xs font-semibold text-[#24212B] dark:text-[#F5F3FA]">
                             {ci.title}
                             {ci.person ? ` · ${ci.person}` : ''}
                           </span>
-                          <span className="text-[11px] text-[#8E889C]">
+                          <span className="text-[11px] text-[#8E889C] shrink-0">
                             {formatDueLabel(ci.dueAt)}
                           </span>
                         </div>
@@ -440,12 +440,12 @@ export function BrainView({
                         onClick={() => onOpenTimeline(ci)}
                         className="w-full text-left px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] hover:border-[#7657D5] transition-colors space-y-1"
                       >
-                        <div className="flex items-center justify-between gap-2 text-xs">
+                        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-0.5 text-xs">
                           <span className="font-semibold text-[#24212B] dark:text-[#F5F3FA]">
                             {ci.title}
                             {ci.person ? ` · ${ci.person}` : ''}
                           </span>
-                          <span className="text-[#8E889C]">{formatDueLabel(ci.dueAt)}</span>
+                          <span className="text-[#8E889C] shrink-0">{formatDueLabel(ci.dueAt)}</span>
                         </div>
                         {latest && (
                           <p className="text-xs text-[#666173] dark:text-[#A7A2B8] truncate">
@@ -465,11 +465,11 @@ export function BrainView({
       {/* Conversation Browser: Group by Person / Status / Project */}
       <section className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="inline-flex items-center p-1 rounded-xl bg-[#EAE4FF]/60 dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] self-start">
+          <div className="inline-flex items-center p-1 rounded-xl bg-[#EAE4FF]/60 dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] self-start max-w-full overflow-x-auto">
             <button
               type="button"
               onClick={() => setGroupMode('person')}
-              className={`min-h-[38px] inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
+              className={`min-h-[44px] sm:min-h-[38px] inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
                 groupMode === 'person'
                   ? 'bg-white dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF] shadow-sm'
                   : 'text-[#666173] dark:text-[#A7A2B8] hover:text-[#24212B] dark:hover:text-[#F5F3FA]'
@@ -484,7 +484,7 @@ export function BrainView({
                 setGroupMode('status');
                 setSelectedPersonKey(null);
               }}
-              className={`min-h-[38px] inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
+              className={`min-h-[44px] sm:min-h-[38px] inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
                 groupMode === 'status'
                   ? 'bg-white dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF] shadow-sm'
                   : 'text-[#666173] dark:text-[#A7A2B8] hover:text-[#24212B] dark:hover:text-[#F5F3FA]'
@@ -499,7 +499,7 @@ export function BrainView({
                 setGroupMode('project');
                 setSelectedPersonKey(null);
               }}
-              className={`min-h-[38px] inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
+              className={`min-h-[44px] sm:min-h-[38px] inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
                 groupMode === 'project'
                   ? 'bg-white dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF] shadow-sm'
                   : 'text-[#666173] dark:text-[#A7A2B8] hover:text-[#24212B] dark:hover:text-[#F5F3FA]'

@@ -121,13 +121,13 @@ export function ReminderCard({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.98 }}
         transition={{ duration: 0.16 }}
-        className={`relative group rounded-2xl border bg-white dark:bg-[#1A1726] p-4 transition-colors ${
+        className={`relative group rounded-2xl border bg-white dark:bg-[#1A1726] p-3.5 sm:p-4 transition-colors ${
           overdue && item.status !== 'closed'
             ? 'border-[#D9534F]/45 dark:border-[#FCA5A5]/35'
             : 'border-[#E6E1F2] dark:border-[#2C2740] hover:border-[#7657D5]/55 dark:hover:border-[#7657D5]/60'
         }`}
       >
-        <div className="flex items-start gap-3.5">
+        <div className="flex items-start gap-2.5 sm:gap-3.5">
           {/* Person initials or category mark */}
           <button
             type="button"
@@ -201,7 +201,7 @@ export function ReminderCard({
                   onClick={() => onSnoozeQuick(item)}
                   title="Snooze 1 hour"
                   aria-label={`Snooze ${item.title} for 1 hour`}
-                  className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#24212B] dark:hover:text-[#F5F3FA] hover:bg-[#FAF9FC] dark:hover:bg-[#2B2444] transition-colors"
+                  className="min-w-[44px] min-h-[44px] sm:min-w-[40px] sm:min-h-[40px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#24212B] dark:hover:text-[#F5F3FA] hover:bg-[#FAF9FC] dark:hover:bg-[#2B2444] transition-colors"
                 >
                   <Clock className="w-4 h-4" />
                 </button>
@@ -210,7 +210,7 @@ export function ReminderCard({
                   onClick={() => onComplete(item)}
                   title="What happened next?"
                   aria-label={`Check in on ${item.title}`}
-                  className="min-w-[40px] min-h-[40px] inline-flex items-center justify-center gap-1 px-2.5 rounded-xl bg-[#EAE4FF]/70 dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF] hover:bg-[#7657D5] hover:text-white transition-colors text-xs font-semibold"
+                  className="min-w-[44px] min-h-[44px] sm:min-w-[40px] sm:min-h-[40px] inline-flex items-center justify-center gap-1 px-2.5 rounded-xl bg-[#EAE4FF]/70 dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF] hover:bg-[#7657D5] hover:text-white transition-colors text-xs font-semibold"
                 >
                   {item.followUpRule.enabled || item.person ? (
                     <>
@@ -228,7 +228,7 @@ export function ReminderCard({
                 type="button"
                 onClick={() => setExpandedTimeline((v) => !v)}
                 aria-label={expandedTimeline ? 'Collapse timeline' : 'Expand timeline'}
-                className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#7657D5] dark:hover:text-[#C5B4FF] hover:bg-[#FAF9FC] dark:hover:bg-[#2B2444] transition-colors"
+                className="min-w-[44px] min-h-[44px] sm:min-w-[40px] sm:min-h-[40px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#7657D5] dark:hover:text-[#C5B4FF] hover:bg-[#FAF9FC] dark:hover:bg-[#2B2444] transition-colors"
               >
                 {expandedTimeline ? (
                   <ChevronUp className="w-4 h-4" />
@@ -242,7 +242,7 @@ export function ReminderCard({
                 onClick={() => onOpenTimeline(item)}
                 title="Open conversation timeline"
                 aria-label={`Open timeline for ${item.title}`}
-                className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#7657D5] dark:hover:text-[#C5B4FF] hover:bg-[#FAF9FC] dark:hover:bg-[#2B2444] transition-colors"
+                className="min-w-[44px] min-h-[44px] sm:min-w-[40px] sm:min-h-[40px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#7657D5] dark:hover:text-[#C5B4FF] hover:bg-[#FAF9FC] dark:hover:bg-[#2B2444] transition-colors"
               >
                 <MessageSquareText className="w-4 h-4" />
               </button>

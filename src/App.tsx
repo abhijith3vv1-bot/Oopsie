@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
   BarChart3,
@@ -9,6 +9,7 @@ import {
   Cloud,
   Flame,
   Home,
+  LayoutGrid,
   Link2,
   LogIn,
   MessageSquareText,
@@ -71,25 +72,52 @@ import {
 import { AssistantOrb } from './components/AssistantOrb';
 import { OnboardingFlow } from './components/OnboardingFlow';
 import { DashboardHome, type ReminderFilterTab } from './components/DashboardHome';
-import { RemindersView } from './components/RemindersView';
-import { PeopleView } from './components/PeopleView';
-import { InsightsView } from './components/InsightsView';
-import { BrainView } from './components/BrainView';
-import { CalendarView } from './components/CalendarView';
 import { LiveClock } from './components/LiveClock';
-import { ReminderPopupModal } from './components/ReminderPopupModal';
-import { FollowUpDrawer } from './components/FollowUpDrawer';
-import { WhatHappenedNextModal } from './components/WhatHappenedNextModal';
-import { AddReminderModal } from './components/AddReminderModal';
 import { ConfirmDialog } from './components/ConfirmDialog';
-import { SettingsModal } from './components/SettingsModal';
 import { PWAInstallButton } from './components/PWAInstallButton';
+import { PWAInstallBanner } from './components/PWAInstallBanner';
+import { PWAUpdateBanner } from './components/PWAUpdateBanner';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { AuthGateCard } from './components/AuthGateCard';
-import { ConnectView } from './components/ConnectView';
-import { PrivacySecurityView } from './components/PrivacySecurityView';
 import { setClientAiAnalysisPaused } from './services/api';
 import { purgeAllConnectData } from './services/connect';
+
+const RemindersView = lazy(() =>
+  import('./components/RemindersView').then((m) => ({ default: m.RemindersView }))
+);
+const PeopleView = lazy(() =>
+  import('./components/PeopleView').then((m) => ({ default: m.PeopleView }))
+);
+const InsightsView = lazy(() =>
+  import('./components/InsightsView').then((m) => ({ default: m.InsightsView }))
+);
+const BrainView = lazy(() =>
+  import('./components/BrainView').then((m) => ({ default: m.BrainView }))
+);
+const CalendarView = lazy(() =>
+  import('./components/CalendarView').then((m) => ({ default: m.CalendarView }))
+);
+const ConnectView = lazy(() =>
+  import('./components/ConnectView').then((m) => ({ default: m.ConnectView }))
+);
+const PrivacySecurityView = lazy(() =>
+  import('./components/PrivacySecurityView').then((m) => ({ default: m.PrivacySecurityView }))
+);
+const ReminderPopupModal = lazy(() =>
+  import('./components/ReminderPopupModal').then((m) => ({ default: m.ReminderPopupModal }))
+);
+const FollowUpDrawer = lazy(() =>
+  import('./components/FollowUpDrawer').then((m) => ({ default: m.FollowUpDrawer }))
+);
+const WhatHappenedNextModal = lazy(() =>
+  import('./components/WhatHappenedNextModal').then((m) => ({ default: m.WhatHappenedNextModal }))
+);
+const AddReminderModal = lazy(() =>
+  import('./components/AddReminderModal').then((m) => ({ default: m.AddReminderModal }))
+);
+const SettingsModal = lazy(() =>
+  import('./components/SettingsModal').then((m) => ({ default: m.SettingsModal }))
+);
 import { useFirebaseAuth } from './contexts/FirebaseContext';
 import {
   clearCloudContacts,
@@ -175,6 +203,7 @@ export default function App() {
   }>({ open: false });
 
   const [showNotificationsPopover, setShowNotificationsPopover] = useState(false);
+  const [showMobileMoreSheet, setShowMobileMoreSheet] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [pendingResetAll, setPendingResetAll] = useState(false);
@@ -399,15 +428,39 @@ export default function App() {
     return () => window.clearInterval(id);
   }, []);
 
-  // Sync dark mode class on <html>
+  // Sync dark mode class on <html> and browser/PWA theme-color status bar
   useEffect(() => {
     const root = document.documentElement;
-    if (profile.theme === 'dark') {
+    const isDark = profile.theme === 'dark';
+    if (isDark) {
       root.classList.add('dark');
     } else {
       root.classList.remove('dark');
     }
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeMeta) {
+      themeMeta.setAttribute('content', isDark ? '#12101A' : '#FAF9FC');
+    }
   }, [profile.theme]);
+
+  // Keep focused form fields visible above mobile virtual keyboards
+  useEffect(() => {
+    const onFocusIn = (e: FocusEvent) => {
+      if (typeof window === 'undefined' || window.innerWidth >= 768) return;
+      const target = e.target;
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement
+      ) {
+        window.setTimeout(() => {
+          target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }, 280);
+      }
+    };
+    document.addEventListener('focusin', onFocusIn);
+    return () => document.removeEventListener('focusin', onFocusIn);
+  }, []);
 
   // Persist local state
   useEffect(() => {
@@ -966,7 +1019,7 @@ export default function App() {
 
   if (!authReady) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-[#FAF9FC] dark:bg-[#12101A] text-[#24212B] dark:text-[#F5F3FA]">
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center gap-3 bg-[#FAF9FC] dark:bg-[#12101A] text-[#24212B] dark:text-[#F5F3FA]">
         <AssistantOrb mood="thinking" size="lg" />
         <p className="text-sm font-medium text-[#666173] dark:text-[#A7A2B8]">
           Waking up Oopsie...
@@ -981,7 +1034,7 @@ export default function App() {
 
   if (user && cloudSyncedUid !== user.uid) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-[#FAF9FC] dark:bg-[#12101A] text-[#24212B] dark:text-[#F5F3FA]">
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center gap-3 bg-[#FAF9FC] dark:bg-[#12101A] text-[#24212B] dark:text-[#F5F3FA]">
         <AssistantOrb mood="thinking" size="lg" />
         <p className="text-sm font-medium text-[#666173] dark:text-[#A7A2B8]">
           Syncing your Oopsie workspace...
@@ -1030,7 +1083,7 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF9FC] dark:bg-[#12101A] text-[#24212B] dark:text-[#F5F3FA] flex">
+    <div className="min-h-[100dvh] bg-[#FAF9FC] dark:bg-[#12101A] text-[#24212B] dark:text-[#F5F3FA] flex">
       {/* Desktop Collapsible Sidebar */}
       <aside
         aria-label="Primary sidebar navigation"
@@ -1196,16 +1249,16 @@ export default function App() {
       </aside>
 
       {/* Main Content Column */}
-      <div className="flex-1 min-w-0 flex flex-col pb-24 md:pb-12">
+      <div className="flex-1 min-w-0 flex flex-col pb-[calc(5.75rem+env(safe-area-inset-bottom))] md:pb-12">
         {/* Top Bar (Desktop + Mobile) */}
-        <header className="sticky top-0 z-30 h-14 sm:h-16 bg-[#FAF9FC]/90 dark:bg-[#12101A]/90 backdrop-blur-md border-b border-[#E6E1F2] dark:border-[#2C2740]">
-          <div className="max-w-6xl mx-auto h-full px-4 sm:px-6 flex items-center justify-between gap-4">
+        <header className="sticky top-0 z-30 pt-[env(safe-area-inset-top)] bg-[#FAF9FC]/90 dark:bg-[#12101A]/90 backdrop-blur-md border-b border-[#E6E1F2] dark:border-[#2C2740]">
+          <div className="max-w-6xl mx-auto h-14 sm:h-16 px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-4">
             {/* Left: Mobile brand / Desktop page title + live clock */}
-            <div className="flex items-center gap-3 min-w-0">
+            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
               <button
                 type="button"
                 onClick={() => setActiveTab('home')}
-                className="md:hidden inline-flex items-center gap-2 shrink-0"
+                className="md:hidden min-h-[44px] inline-flex items-center gap-2 shrink-0 pr-1"
               >
                 <AssistantOrb mood={headerOrbMood} size="xs" />
                 <span className="text-base font-bold font-display text-[#24212B] dark:text-[#F5F3FA]">
@@ -1227,25 +1280,12 @@ export default function App() {
             </div>
 
             {/* Right: Actions (Mobile Connect, Install, Notifications Popover, Theme, Profile) */}
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                type="button"
-                onClick={() => setActiveTab('security')}
-                aria-label="Open Privacy and Security Centre"
-                className={`md:hidden min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl border transition-colors ${
-                  activeTab === 'security'
-                    ? 'border-[#7657D5] bg-[#EAE4FF] dark:bg-[#2B2444] text-[#4C32A8] dark:text-[#EAE4FF]'
-                    : 'border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] text-[#24212B] dark:text-[#F5F3FA]'
-                }`}
-              >
-                <ShieldCheck className="w-4 h-4" />
-              </button>
-
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               <button
                 type="button"
                 onClick={() => setActiveTab('connect')}
                 aria-label="Open Oopsie Connect"
-                className={`md:hidden relative min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl border transition-colors ${
+                className={`md:hidden relative min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl border transition-colors ${
                   activeTab === 'connect'
                     ? 'border-[#7657D5] bg-[#EAE4FF] dark:bg-[#2B2444] text-[#4C32A8] dark:text-[#EAE4FF]'
                     : 'border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] text-[#24212B] dark:text-[#F5F3FA]'
@@ -1269,7 +1309,7 @@ export default function App() {
                   type="button"
                   onClick={() => setShowNotificationsPopover((v) => !v)}
                   aria-label="Open notifications"
-                  className="relative min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] hover:bg-[#EAE4FF]/40 dark:hover:bg-[#241F35] text-[#24212B] dark:text-[#F5F3FA] transition-colors"
+                  className="relative min-w-[44px] min-h-[44px] sm:min-w-[40px] sm:min-h-[40px] flex items-center justify-center rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] hover:bg-[#EAE4FF]/40 dark:hover:bg-[#241F35] text-[#24212B] dark:text-[#F5F3FA] transition-colors"
                 >
                   <Bell className="w-4 h-4" />
                   {notificationItems.length > 0 && (
@@ -1286,7 +1326,7 @@ export default function App() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 6, scale: 0.97 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] shadow-xl p-4 space-y-3 z-50"
+                      className="fixed sm:absolute left-3 right-3 sm:left-auto sm:right-0 top-[calc(3.75rem+env(safe-area-inset-top))] sm:top-full sm:mt-2 sm:w-96 rounded-2xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] shadow-xl p-4 space-y-3 z-50"
                     >
                       <div className="flex items-center justify-between">
                         <p className="text-xs font-semibold text-[#24212B] dark:text-[#F5F3FA]">
@@ -1355,7 +1395,7 @@ export default function App() {
                 type="button"
                 onClick={toggleTheme}
                 aria-label={profile.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-                className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] hover:bg-[#EAE4FF]/40 dark:hover:bg-[#241F35] text-[#24212B] dark:text-[#F5F3FA] transition-colors"
+                className="min-w-[44px] min-h-[44px] sm:min-w-[40px] sm:min-h-[40px] flex items-center justify-center rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] hover:bg-[#EAE4FF]/40 dark:hover:bg-[#241F35] text-[#24212B] dark:text-[#F5F3FA] transition-colors"
               >
                 {profile.theme === 'dark' ? (
                   <Sun className="w-4 h-4 text-[#B9A7F5]" />
@@ -1369,7 +1409,7 @@ export default function App() {
                 type="button"
                 onClick={() => setShowSettings(true)}
                 aria-label="Open profile and preferences"
-                className="min-h-[40px] inline-flex items-center gap-2 px-2.5 sm:px-3 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] hover:bg-[#EAE4FF]/40 dark:hover:bg-[#241F35] text-xs font-medium text-[#24212B] dark:text-[#F5F3FA] whitespace-nowrap shrink-0 transition-colors"
+                className="min-w-[44px] min-h-[44px] sm:min-h-[40px] inline-flex items-center justify-center gap-2 px-2.5 sm:px-3 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] hover:bg-[#EAE4FF]/40 dark:hover:bg-[#241F35] text-xs font-medium text-[#24212B] dark:text-[#F5F3FA] whitespace-nowrap shrink-0 transition-colors"
               >
                 {user ? (
                   user.photoURL && !avatarImgError ? (
@@ -1395,7 +1435,7 @@ export default function App() {
         </header>
 
         {/* Main Workspace Container */}
-        <main className="max-w-6xl w-full mx-auto px-4 sm:px-6 pt-5 sm:pt-7 space-y-6">
+        <main className="max-w-6xl w-full mx-auto px-4 sm:px-6 pt-4 sm:pt-7 space-y-5 sm:space-y-6">
           {/* Gentle banner if browser notifications are denied */}
           {typeof window !== 'undefined' &&
             'Notification' in window &&
@@ -1412,12 +1452,14 @@ export default function App() {
                   type="button"
                   onClick={() => setDeniedBannerDismissed(true)}
                   aria-label="Dismiss notification banner"
-                  className="p-1 rounded-lg text-[#666173] hover:text-[#24212B] dark:hover:text-[#F5F3FA] shrink-0"
+                  className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#24212B] dark:hover:text-[#F5F3FA] shrink-0"
                 >
-                  <X className="w-3.5 h-3.5" />
+                  <X className="w-4 h-4" />
                 </button>
               </div>
             )}
+
+          {activeTab === 'home' && <PWAInstallBanner />}
 
           {activeTab === 'home' && (
             <DashboardHome
@@ -1451,6 +1493,14 @@ export default function App() {
             />
           )}
 
+          <Suspense
+            fallback={
+              <div className="py-16 flex flex-col items-center justify-center gap-3 text-xs text-[#666173] dark:text-[#A7A2B8]">
+                <AssistantOrb mood="thinking" size="sm" />
+                <span>Loading view...</span>
+              </div>
+            }
+          >
           {activeTab === 'reminders' && (
             <RemindersView
               items={items}
@@ -1588,18 +1638,121 @@ export default function App() {
               onNotifyToast={showToast}
             />
           )}
+          </Suspense>
         </main>
       </div>
+
+      {/* Mobile More Navigation Sheet (People, Calendar, Insights, Connect, Privacy, Install) */}
+      <AnimatePresence>
+        {showMobileMoreSheet && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="md:hidden fixed inset-0 z-50 bg-[#24212B]/55 backdrop-blur-sm flex items-end"
+            onClick={() => setShowMobileMoreSheet(false)}
+          >
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', stiffness: 320, damping: 32 }}
+              onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-label="More workspace sections"
+              className="w-full rounded-t-3xl bg-white dark:bg-[#1A1726] border-t border-[#E6E1F2] dark:border-[#2C2740] p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] space-y-4 max-h-[85dvh] overflow-y-auto shadow-2xl"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-base font-semibold font-display text-[#24212B] dark:text-[#F5F3FA]">
+                    More in Oopsie
+                  </h2>
+                  <p className="text-xs text-[#666173] dark:text-[#A7A2B8]">
+                    Jump to any workspace view or preferences
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowMobileMoreSheet(false)}
+                  aria-label="Close navigation sheet"
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-[#666173] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35]"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2.5">
+                {[
+                  { id: 'people' as AppTab, label: 'People', icon: Users },
+                  { id: 'calendar' as AppTab, label: 'Calendar', icon: CalendarDays },
+                  { id: 'insights' as AppTab, label: 'Insights', icon: BarChart3 },
+                  {
+                    id: 'connect' as AppTab,
+                    label: 'Connect',
+                    icon: Link2,
+                    badge: connectCandidateCount > 0 ? connectCandidateCount : undefined,
+                  },
+                  { id: 'security' as AppTab, label: 'Privacy & Security', icon: ShieldCheck },
+                ].map((entry) => {
+                  const Icon = entry.icon;
+                  const active = activeTab === entry.id;
+                  return (
+                    <button
+                      key={entry.id}
+                      type="button"
+                      onClick={() => {
+                        if (entry.id === 'people') setSelectedPersonKey(null);
+                        setActiveTab(entry.id);
+                        setShowMobileMoreSheet(false);
+                      }}
+                      className={`min-h-[52px] flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-2xl border text-left transition-colors ${
+                        active
+                          ? 'border-[#7657D5] bg-[#EAE4FF]/70 dark:bg-[#2B2444] text-[#4C32A8] dark:text-[#EAE4FF]'
+                          : 'border-[#E6E1F2] dark:border-[#2C2740] bg-[#FAF9FC] dark:bg-[#12101A] text-[#24212B] dark:text-[#F5F3FA]'
+                      }`}
+                    >
+                      <span className="inline-flex items-center gap-2.5 min-w-0">
+                        <Icon className="w-4 h-4 text-[#7657D5] dark:text-[#B9A7F5] shrink-0" />
+                        <span className="text-xs font-semibold truncate">{entry.label}</span>
+                      </span>
+                      {typeof entry.badge === 'number' && entry.badge > 0 && (
+                        <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-[#7657D5] text-white text-[10px] font-mono font-bold tabular-nums flex items-center justify-center shrink-0">
+                          {entry.badge}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowMobileMoreSheet(false);
+                    setShowSettings(true);
+                  }}
+                  className="min-h-[52px] flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl border border-[#E6E1F2] dark:border-[#2C2740] bg-[#FAF9FC] dark:bg-[#12101A] text-left text-[#24212B] dark:text-[#F5F3FA]"
+                >
+                  <Settings className="w-4 h-4 text-[#7657D5] dark:text-[#B9A7F5] shrink-0" />
+                  <span className="text-xs font-semibold truncate">Preferences</span>
+                </button>
+              </div>
+
+              <PWAInstallButton fullWidth />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Mobile Bottom 5-Slot Thumb-Zone Navigation with Central Floating + Button */}
       <nav
         aria-label="Mobile navigation"
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 h-16 bg-white/95 dark:bg-[#1A1726]/95 backdrop-blur-md border-t border-[#E6E1F2] dark:border-[#2C2740] grid grid-cols-5 items-center px-1"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 h-[calc(4rem+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)] bg-white/95 dark:bg-[#1A1726]/95 backdrop-blur-md border-t border-[#E6E1F2] dark:border-[#2C2740] grid grid-cols-5 items-center px-1"
       >
         <button
           type="button"
           onClick={() => setActiveTab('home')}
-          className={`h-full flex flex-col items-center justify-center gap-0.5 text-[11px] font-medium ${
+          className={`h-full min-h-[44px] flex flex-col items-center justify-center gap-0.5 text-[11px] font-medium ${
             activeTab === 'home'
               ? 'text-[#7657D5] dark:text-[#B9A7F5]'
               : 'text-[#666173] dark:text-[#A7A2B8]'
@@ -1612,7 +1765,7 @@ export default function App() {
         <button
           type="button"
           onClick={() => setActiveTab('reminders')}
-          className={`h-full flex flex-col items-center justify-center gap-0.5 text-[11px] font-medium ${
+          className={`h-full min-h-[44px] flex flex-col items-center justify-center gap-0.5 text-[11px] font-medium ${
             activeTab === 'reminders'
               ? 'text-[#7657D5] dark:text-[#B9A7F5]'
               : 'text-[#666173] dark:text-[#A7A2B8]'
@@ -1637,7 +1790,7 @@ export default function App() {
         <button
           type="button"
           onClick={() => setActiveTab('conversations')}
-          className={`h-full flex flex-col items-center justify-center gap-0.5 text-[11px] font-medium ${
+          className={`h-full min-h-[44px] flex flex-col items-center justify-center gap-0.5 text-[11px] font-medium ${
             activeTab === 'conversations'
               ? 'text-[#7657D5] dark:text-[#B9A7F5]'
               : 'text-[#666173] dark:text-[#A7A2B8]'
@@ -1649,18 +1802,20 @@ export default function App() {
 
         <button
           type="button"
-          onClick={() => {
-            setSelectedPersonKey(null);
-            setActiveTab('people');
-          }}
-          className={`h-full flex flex-col items-center justify-center gap-0.5 text-[11px] font-medium ${
-            activeTab === 'people'
+          onClick={() => setShowMobileMoreSheet(true)}
+          aria-expanded={showMobileMoreSheet}
+          className={`relative h-full min-h-[44px] flex flex-col items-center justify-center gap-0.5 text-[11px] font-medium ${
+            ['people', 'calendar', 'insights', 'connect', 'security'].includes(activeTab) ||
+            showMobileMoreSheet
               ? 'text-[#7657D5] dark:text-[#B9A7F5]'
               : 'text-[#666173] dark:text-[#A7A2B8]'
           }`}
         >
-          <Users className="w-5 h-5" />
-          <span>People</span>
+          <LayoutGrid className="w-5 h-5" />
+          <span>More</span>
+          {connectCandidateCount > 0 && (
+            <span className="absolute top-2 right-[26%] w-2 h-2 rounded-full bg-[#7657D5]" />
+          )}
         </button>
       </nav>
 
@@ -1671,131 +1826,134 @@ export default function App() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 12 }}
-            className="fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-2xl bg-[#24212B] dark:bg-[#EAE4FF] text-white dark:text-[#24212B] text-xs sm:text-sm font-medium shadow-lg whitespace-nowrap"
+            className="fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom))] md:bottom-8 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-2rem)] px-4 py-2.5 rounded-2xl bg-[#24212B] dark:bg-[#EAE4FF] text-white dark:text-[#24212B] text-xs sm:text-sm font-medium shadow-lg text-center leading-snug"
           >
             {toastMessage}
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Offline Indicator */}
+      {/* Offline & PWA Update Indicators */}
       <OfflineIndicator />
+      <PWAUpdateBanner />
 
-      {/* Add Reminder Modal (Quick-Add + Detailed Form) */}
-      <AnimatePresence>
-        {addModalConfig.open && (
-          <AddReminderModal
-            userProfile={profile}
-            existingPeople={existingPeopleNames}
-            existingItems={items}
-            initialPerson={addModalConfig.initialPerson}
-            initialDateIso={addModalConfig.initialDateIso}
-            initialPrompt={addModalConfig.initialPrompt}
-            onCreateItems={(drafts, rawNote) => {
-              const created = handleCreateItems(drafts, rawNote);
-              setAssistantMood('happy');
-              showToast(
-                created.length === 1
-                  ? `Scheduled "${created[0].title}".`
-                  : `Scheduled ${created.length} follow-ups.`
-              );
-              setTimeout(() => setAssistantMood('idle'), 1800);
-            }}
-            onClose={() => setAddModalConfig({ open: false })}
-          />
-        )}
-      </AnimatePresence>
+      <Suspense fallback={null}>
+        {/* Add Reminder Modal (Quick-Add + Detailed Form) */}
+        <AnimatePresence>
+          {addModalConfig.open && (
+            <AddReminderModal
+              userProfile={profile}
+              existingPeople={existingPeopleNames}
+              existingItems={items}
+              initialPerson={addModalConfig.initialPerson}
+              initialDateIso={addModalConfig.initialDateIso}
+              initialPrompt={addModalConfig.initialPrompt}
+              onCreateItems={(drafts, rawNote) => {
+                const created = handleCreateItems(drafts, rawNote);
+                setAssistantMood('happy');
+                showToast(
+                  created.length === 1
+                    ? `Scheduled "${created[0].title}".`
+                    : `Scheduled ${created.length} follow-ups.`
+                );
+                setTimeout(() => setAssistantMood('idle'), 1800);
+              }}
+              onClose={() => setAddModalConfig({ open: false })}
+            />
+          )}
+        </AnimatePresence>
 
-      {/* Signature "Hey! What happened next?" Modal */}
-      <AnimatePresence>
-        {whatHappenedItem && (
-          <WhatHappenedNextModal
-            item={whatHappenedItem}
-            userProfile={profile}
-            onUpdateItem={handleUpdateItem}
-            onOpenFullTimeline={(it) => {
-              setWhatHappenedItemId(null);
-              setDrawerState({ itemId: it.id, triggerCheckIn: false });
-            }}
-            onClose={() => setWhatHappenedItemId(null)}
-          />
-        )}
-      </AnimatePresence>
+        {/* Signature "Hey! What happened next?" Modal */}
+        <AnimatePresence>
+          {whatHappenedItem && (
+            <WhatHappenedNextModal
+              item={whatHappenedItem}
+              userProfile={profile}
+              onUpdateItem={handleUpdateItem}
+              onOpenFullTimeline={(it) => {
+                setWhatHappenedItemId(null);
+                setDrawerState({ itemId: it.id, triggerCheckIn: false });
+              }}
+              onClose={() => setWhatHappenedItemId(null)}
+            />
+          )}
+        </AnimatePresence>
 
-      {/* Due Reminder Alarm Popup */}
-      <AnimatePresence>
-        {duePopupItem && (
-          <ReminderPopupModal
-            item={duePopupItem}
-            userProfile={profile}
-            ringCount={ringCount}
-            onDone={handleCompleteOrCheckIn}
-            onSnooze={handleSnooze}
-            onNeedsFollowUp={handleNeedsFollowUpFromPopup}
-            onDropItem={handleDropItemFromPopup}
-            onDismiss={() => {
-              setDuePopupItemId(null);
-              setAssistantMood('idle');
-            }}
-          />
-        )}
-      </AnimatePresence>
+        {/* Due Reminder Alarm Popup */}
+        <AnimatePresence>
+          {duePopupItem && (
+            <ReminderPopupModal
+              item={duePopupItem}
+              userProfile={profile}
+              ringCount={ringCount}
+              onDone={handleCompleteOrCheckIn}
+              onSnooze={handleSnooze}
+              onNeedsFollowUp={handleNeedsFollowUpFromPopup}
+              onDropItem={handleDropItemFromPopup}
+              onDismiss={() => {
+                setDuePopupItemId(null);
+                setAssistantMood('idle');
+              }}
+            />
+          )}
+        </AnimatePresence>
 
-      {/* Follow-up & Timeline Drawer */}
-      <AnimatePresence>
-        {drawerItem && (
-          <FollowUpDrawer
-            item={drawerItem}
-            userProfile={profile}
-            triggerCheckInOnOpen={drawerState?.triggerCheckIn ?? false}
-            onUpdateItem={handleUpdateItem}
-            onOpenWhatHappened={handleCompleteOrCheckIn}
-            onDeleteItem={(id) => setPendingDeleteId(id)}
-            onClose={() => setDrawerState(null)}
-          />
-        )}
-      </AnimatePresence>
+        {/* Follow-up & Timeline Drawer */}
+        <AnimatePresence>
+          {drawerItem && (
+            <FollowUpDrawer
+              item={drawerItem}
+              userProfile={profile}
+              triggerCheckInOnOpen={drawerState?.triggerCheckIn ?? false}
+              onUpdateItem={handleUpdateItem}
+              onOpenWhatHappened={handleCompleteOrCheckIn}
+              onDeleteItem={(id) => setPendingDeleteId(id)}
+              onClose={() => setDrawerState(null)}
+            />
+          )}
+        </AnimatePresence>
 
-      {/* Settings & Backup Modal */}
-      <AnimatePresence>
-        {showSettings && (
-          <SettingsModal
-            profile={profile}
-            items={items}
-            onSaveProfile={(next) => {
-              setProfile(next);
-              if (user) {
-                void upsertCloudProfile(user.uid, user.email, next).catch(reportSyncError);
-              }
-            }}
-            onImportBundle={(nextProfile, nextItems) => {
-              setProfile(nextProfile);
-              setItems(nextItems);
-              if (user) {
-                void upsertCloudProfile(user.uid, user.email, nextProfile)
-                  .then(() => Promise.all(nextItems.map((it) => saveCloudReminder(user.uid, it))))
-                  .catch(reportSyncError);
-              }
-            }}
-            onLoadSampleData={handleLoadSampleData}
-            onRequestResetAll={() => setPendingResetAll(true)}
-            onOpenSecurityCentre={() => {
-              setShowSettings(false);
-              setActiveTab('security');
-            }}
-            onSignedOut={() => {
-              clearAllData();
-              clearLocalContactsVault();
-              void purgeAllConnectData();
-              setItems([]);
-              setContactsMap({});
-              setProfile(getDefaultProfile());
-              setCloudSyncedUid(null);
-            }}
-            onClose={() => setShowSettings(false)}
-          />
-        )}
-      </AnimatePresence>
+        {/* Settings & Backup Modal */}
+        <AnimatePresence>
+          {showSettings && (
+            <SettingsModal
+              profile={profile}
+              items={items}
+              onSaveProfile={(next) => {
+                setProfile(next);
+                if (user) {
+                  void upsertCloudProfile(user.uid, user.email, next).catch(reportSyncError);
+                }
+              }}
+              onImportBundle={(nextProfile, nextItems) => {
+                setProfile(nextProfile);
+                setItems(nextItems);
+                if (user) {
+                  void upsertCloudProfile(user.uid, user.email, nextProfile)
+                    .then(() => Promise.all(nextItems.map((it) => saveCloudReminder(user.uid, it))))
+                    .catch(reportSyncError);
+                }
+              }}
+              onLoadSampleData={handleLoadSampleData}
+              onRequestResetAll={() => setPendingResetAll(true)}
+              onOpenSecurityCentre={() => {
+                setShowSettings(false);
+                setActiveTab('security');
+              }}
+              onSignedOut={() => {
+                clearAllData();
+                clearLocalContactsVault();
+                void purgeAllConnectData();
+                setItems([]);
+                setContactsMap({});
+                setProfile(getDefaultProfile());
+                setCloudSyncedUid(null);
+              }}
+              onClose={() => setShowSettings(false)}
+            />
+          )}
+        </AnimatePresence>
+      </Suspense>
 
       {/* Confirm Delete Reminder Dialog */}
       <AnimatePresence>

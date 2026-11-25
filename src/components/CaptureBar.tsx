@@ -447,14 +447,14 @@ export function CaptureBar({
           </div>
         </div>
 
-        <div className="mt-3 pt-3 border-t border-[#EEEAF8] dark:border-[#2C2740] flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
+        <div className="mt-3 pt-3 border-t border-[#EEEAF8] dark:border-[#2C2740] flex flex-wrap items-center justify-between gap-2.5">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             {speechSupported && (
               <button
                 type="button"
                 onClick={toggleVoice}
                 aria-label={isListening ? 'Stop listening' : 'Speak reminder'}
-                className={`min-h-[40px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors whitespace-nowrap shrink-0 ${
+                className={`min-h-[44px] sm:min-h-[40px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors whitespace-nowrap shrink-0 ${
                   isListening
                     ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-300'
                     : 'text-[#666173] dark:text-[#A7A2B8] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35]'
@@ -467,7 +467,7 @@ export function CaptureBar({
             <button
               type="button"
               onClick={() => setShowManualForm((v) => !v)}
-              className="min-h-[40px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-[#666173] dark:text-[#A7A2B8] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] transition-colors whitespace-nowrap shrink-0"
+              className="min-h-[44px] sm:min-h-[40px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-[#666173] dark:text-[#A7A2B8] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] transition-colors whitespace-nowrap shrink-0"
             >
               <Plus className="w-4 h-4" />
               <span>Quick fields</span>
@@ -479,7 +479,7 @@ export function CaptureBar({
                   setActiveThread([]);
                   setTopicBoundaryIndex(messages.length);
                 }}
-                className="min-h-[40px] inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs text-[#666173] hover:text-[#24212B] dark:hover:text-[#F5F3FA]"
+                className="min-h-[44px] sm:min-h-[40px] inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs text-[#666173] hover:text-[#24212B] dark:hover:text-[#F5F3FA]"
               >
                 <X className="w-3.5 h-3.5" />
                 New topic
@@ -491,7 +491,7 @@ export function CaptureBar({
             type="button"
             disabled={!text.trim() || isParsing}
             onClick={() => handleSubmit()}
-            className="min-h-[42px] inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] disabled:opacity-40 disabled:pointer-events-none text-white text-sm font-medium transition-colors whitespace-nowrap shrink-0"
+            className="min-h-[44px] inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] disabled:opacity-40 disabled:pointer-events-none text-white text-sm font-medium transition-colors whitespace-nowrap shrink-0 ml-auto"
           >
             <span>{isParsing ? 'Thinking...' : activeThread.length > 0 ? 'Reply' : 'Capture'}</span>
             <Send className="w-3.5 h-3.5" />
@@ -607,7 +607,7 @@ export function CaptureBar({
                                 type="datetime-local"
                                 value={inlineDateTime}
                                 onChange={(e) => setInlineDateTime(e.target.value)}
-                                className="h-9 px-2.5 rounded-lg bg-[#FAF9FC] dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] font-mono text-xs text-[#24212B] dark:text-[#F5F3FA]"
+                                className="w-full sm:w-auto min-h-[44px] sm:min-h-[36px] px-2.5 rounded-lg bg-[#FAF9FC] dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] font-mono text-xs text-[#24212B] dark:text-[#F5F3FA]"
                               />
                               <button
                                 type="button"
@@ -623,7 +623,7 @@ export function CaptureBar({
                                   });
                                   handleSubmit(formatted);
                                 }}
-                                className="min-h-[36px] px-3 py-1 rounded-lg bg-[#7657D5] hover:bg-[#6546C4] text-white text-xs font-medium whitespace-nowrap shrink-0"
+                                className="min-h-[44px] sm:min-h-[36px] px-3 py-1 rounded-lg bg-[#7657D5] hover:bg-[#6546C4] text-white text-xs font-medium whitespace-nowrap shrink-0"
                               >
                                 Use this time
                               </button>
@@ -766,11 +766,11 @@ export function CaptureBar({
                 <label className="block text-xs font-medium text-[#666173] dark:text-[#A7A2B8] mb-1">
                   Priority &amp; recurring follow-up (days)
                 </label>
-                <div className="flex gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   <select
                     value={manualPriority}
                     onChange={(e) => setManualPriority(e.target.value as ReminderPriority)}
-                    className="flex-1 h-11 px-3 rounded-xl bg-[#FAF9FC] dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] text-sm focus:outline-none focus:ring-2 focus:ring-[#7657D5]/30"
+                    className="w-full h-11 px-3 rounded-xl bg-[#FAF9FC] dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] text-sm focus:outline-none focus:ring-2 focus:ring-[#7657D5]/30"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -783,7 +783,7 @@ export function CaptureBar({
                     value={manualFollowUpDays}
                     onChange={(e) => setManualFollowUpDays(e.target.value)}
                     placeholder="Every X days"
-                    className="w-32 h-11 px-3 rounded-xl bg-[#FAF9FC] dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#7657D5]/30"
+                    className="w-full h-11 px-3 rounded-xl bg-[#FAF9FC] dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#7657D5]/30"
                   />
                 </div>
               </div>
@@ -793,13 +793,13 @@ export function CaptureBar({
               <button
                 type="button"
                 onClick={() => setShowManualForm(false)}
-                className="min-h-[42px] px-4 py-2 rounded-xl text-sm text-[#666173] dark:text-[#A7A2B8] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35]"
+                className="min-h-[44px] px-4 py-2 rounded-xl text-sm text-[#666173] dark:text-[#A7A2B8] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35]"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="min-h-[42px] px-5 py-2 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] text-white text-sm font-medium"
+                className="min-h-[44px] px-5 py-2 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] text-white text-sm font-medium"
               >
                 Save reminder
               </button>

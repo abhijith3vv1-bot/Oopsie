@@ -1,16 +1,16 @@
-import {createRoot} from 'react-dom/client';
-import {registerSW} from 'virtual:pwa-register';
+import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
-import {ErrorBoundary} from './components/ErrorBoundary.tsx';
-import {FirebaseProvider} from './contexts/FirebaseContext.tsx';
+import { ErrorBoundary } from './components/ErrorBoundary.tsx';
+import { FirebaseProvider } from './contexts/FirebaseContext.tsx';
+import { PWAProvider } from './contexts/PWAContext.tsx';
 import './index.css';
-
-registerSW({immediate: true});
 
 createRoot(document.getElementById('root')!).render(
   <ErrorBoundary>
-    <FirebaseProvider>
-      <App />
-    </FirebaseProvider>
+    <PWAProvider>
+      <FirebaseProvider>
+        <App />
+      </FirebaseProvider>
+    </PWAProvider>
   </ErrorBoundary>
 );

@@ -141,7 +141,7 @@ export function RemindersView({
               key={tab.id}
               type="button"
               onClick={() => onChangeFilter(tab.id)}
-              className={`min-h-[38px] inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0 transition-colors ${
+              className={`min-h-[44px] sm:min-h-[38px] inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0 transition-colors ${
                 isActive
                   ? 'bg-[#7657D5] text-white'
                   : 'bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] text-[#666173] dark:text-[#A7A2B8] hover:text-[#24212B] dark:hover:text-[#F5F3FA]'
@@ -162,7 +162,7 @@ export function RemindersView({
 
       {/* Search, Category & Sort Bar */}
       <div className="flex flex-col sm:flex-row gap-2.5">
-        <div className="relative flex-1">
+        <div className="relative flex-1 min-w-0">
           <Search className="w-4 h-4 text-[#8E889C] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
@@ -173,12 +173,12 @@ export function RemindersView({
           />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 shrink-0">
           <select
             aria-label="Filter by category"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value as 'all' | ReminderCategory)}
-            className="h-11 px-3 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium text-[#24212B] dark:text-[#F5F3FA]"
+            className="w-full sm:w-auto h-11 px-3 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium text-[#24212B] dark:text-[#F5F3FA]"
           >
             <option value="all">All categories</option>
             <option value="Work">Work</option>
@@ -189,13 +189,13 @@ export function RemindersView({
             <option value="Social">Social</option>
           </select>
 
-          <div className="relative flex items-center">
+          <div className="relative flex items-center w-full sm:w-auto">
             <ArrowUpDown className="w-3.5 h-3.5 text-[#8E889C] absolute left-3 pointer-events-none" />
             <select
               aria-label="Sort reminders"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortKey)}
-              className="h-11 pl-8 pr-3 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium text-[#24212B] dark:text-[#F5F3FA]"
+              className="w-full sm:w-auto h-11 pl-8 pr-3 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium text-[#24212B] dark:text-[#F5F3FA]"
             >
               <option value="due">Sort: Due date</option>
               <option value="priority">Sort: Priority</option>

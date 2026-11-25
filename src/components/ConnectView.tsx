@@ -1925,7 +1925,7 @@ export function ConnectView({
                   />
                 </label>
 
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-2">
                   <label className="space-y-1 text-xs">
                     <span className="font-medium text-[#666173] dark:text-[#A7A2B8]">Status</span>
                     <select
@@ -1933,7 +1933,7 @@ export function ConnectView({
                       onChange={(e) =>
                         setDraftStatus(e.target.value as 'waiting' | 'needs_action')
                       }
-                      className="w-full rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] px-2 py-2 text-xs text-[#24212B] dark:text-[#F5F3FA]"
+                      className="w-full min-h-[44px] sm:min-h-[38px] rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] px-2.5 py-2 text-xs text-[#24212B] dark:text-[#F5F3FA]"
                     >
                       <option value="waiting">Waiting</option>
                       <option value="needs_action">Needs Action</option>
@@ -1945,7 +1945,7 @@ export function ConnectView({
                     <select
                       value={draftCategory}
                       onChange={(e) => setDraftCategory(e.target.value as ReminderCategory)}
-                      className="w-full rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] px-2 py-2 text-xs text-[#24212B] dark:text-[#F5F3FA]"
+                      className="w-full min-h-[44px] sm:min-h-[38px] rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] px-2.5 py-2 text-xs text-[#24212B] dark:text-[#F5F3FA]"
                     >
                       {CATEGORIES.map((cat) => (
                         <option key={cat} value={cat}>
@@ -1960,7 +1960,7 @@ export function ConnectView({
                     <select
                       value={draftPriority}
                       onChange={(e) => setDraftPriority(e.target.value as ReminderPriority)}
-                      className="w-full rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] px-2 py-2 text-xs text-[#24212B] dark:text-[#F5F3FA]"
+                      className="w-full min-h-[44px] sm:min-h-[38px] rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] px-2.5 py-2 text-xs text-[#24212B] dark:text-[#F5F3FA]"
                     >
                       <option value="low">Low</option>
                       <option value="medium">Medium</option>
@@ -2117,12 +2117,12 @@ export function ConnectView({
       {/* Explicit Permission Consent Modal for Gmail / Google Calendar */}
       <AnimatePresence>
         {pendingConsentPlatform && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/45 backdrop-blur-xs">
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/45 backdrop-blur-xs">
             <motion.div
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96 }}
-              className="w-full max-w-md rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-6 space-y-4 shadow-2xl"
+              className="w-full max-w-md max-h-[92dvh] overflow-y-auto rounded-t-3xl sm:rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] sm:pb-6 space-y-4 shadow-2xl"
             >
               <div className="flex items-center gap-3">
                 <span className="w-10 h-10 rounded-xl bg-[#EAE4FF] dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF] flex items-center justify-center shrink-0">
@@ -2149,18 +2149,18 @@ export function ConnectView({
                 </ul>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-1">
+              <div className="flex flex-wrap items-center justify-end gap-2 pt-1">
                 <button
                   type="button"
                   onClick={() => setPendingConsentPlatform(null)}
-                  className="min-h-[40px] px-4 py-2 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-semibold text-[#666173] dark:text-[#A7A2B8]"
+                  className="min-h-[44px] px-4 py-2 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-semibold text-[#666173] dark:text-[#A7A2B8]"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={() => void handleConfirmWorkspaceConsent()}
-                  className="min-h-[40px] px-4 py-2 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] text-white text-xs font-semibold"
+                  className="min-h-[44px] px-4 py-2 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] text-white text-xs font-semibold"
                 >
                   Allow Read-Only Access
                 </button>

@@ -198,12 +198,15 @@ export function SettingsModal({
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 12 }}
-        className="w-full sm:max-w-lg max-h-[90vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] shadow-xl p-6 space-y-6"
+        className="w-full sm:max-w-lg max-h-[92dvh] overflow-y-auto rounded-t-3xl sm:rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] shadow-xl p-5 sm:p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] sm:pb-6 space-y-6"
       >
-        <div className="flex items-center justify-between">
+        <div className="sm:hidden -mt-2 pb-1 flex justify-center">
+          <span className="w-10 h-1.5 rounded-full bg-[#E6E1F2] dark:bg-[#2C2740]" />
+        </div>
+        <div className="flex items-center justify-between gap-3">
           <h2
             id="settings-title"
-            className="text-lg font-semibold font-display text-[#24212B] dark:text-[#F5F3FA]"
+            className="text-base sm:text-lg font-semibold font-display text-[#24212B] dark:text-[#F5F3FA]"
           >
             Preferences, Alarm &amp; Backup
           </h2>
@@ -211,7 +214,7 @@ export function SettingsModal({
             type="button"
             onClick={onClose}
             aria-label="Close settings"
-            className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl text-[#666173] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35]"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-[#666173] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
@@ -219,7 +222,7 @@ export function SettingsModal({
 
         {/* Google Account & Cloud Sync */}
         <div className="rounded-2xl bg-[#FAF9FC] dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] p-4 space-y-3">
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-[#7657D5] dark:text-[#B9A7F5]">
               <Cloud className="w-3.5 h-3.5" />
               <span>Google Account &amp; Cloud Sync</span>
@@ -232,7 +235,7 @@ export function SettingsModal({
           </div>
 
           {user ? (
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0">
                 {user.photoURL && !avatarFailed ? (
                   <img
@@ -264,7 +267,7 @@ export function SettingsModal({
                   onSignedOut?.();
                   onClose();
                 }}
-                className="min-h-[38px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] text-xs font-medium text-[#24212B] dark:text-[#F5F3FA] shrink-0 transition-colors"
+                className="min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] text-xs font-medium text-[#24212B] dark:text-[#F5F3FA] shrink-0 transition-colors"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Sign out</span>
@@ -282,7 +285,7 @@ export function SettingsModal({
                 type="button"
                 disabled={isSigningIn}
                 onClick={() => void signInWithGoogle()}
-                className="min-h-[40px] inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] text-white text-xs font-semibold disabled:opacity-50 transition-colors"
+                className="min-h-[44px] inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] text-white text-xs font-semibold disabled:opacity-50 transition-colors"
               >
                 <LogIn className="w-3.5 h-3.5" />
                 <span>{isSigningIn ? 'Signing in...' : 'Sign in with Google'}</span>
@@ -294,7 +297,7 @@ export function SettingsModal({
             <button
               type="button"
               onClick={onOpenSecurityCentre}
-              className="w-full min-h-[40px] inline-flex items-center justify-between gap-2 px-3.5 py-2 rounded-xl bg-[#EAE4FF]/70 hover:bg-[#EAE4FF] dark:bg-[#2B2444] dark:hover:bg-[#372E56] text-[#4C32A8] dark:text-[#EAE4FF] text-xs font-semibold transition-colors"
+              className="w-full min-h-[44px] flex-wrap inline-flex items-center justify-between gap-2 px-3.5 py-2 rounded-xl bg-[#EAE4FF]/70 hover:bg-[#EAE4FF] dark:bg-[#2B2444] dark:hover:bg-[#372E56] text-[#4C32A8] dark:text-[#EAE4FF] text-xs font-semibold transition-colors"
             >
               <span className="inline-flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-[#7657D5] dark:text-[#C5B4FF]" />
@@ -318,7 +321,7 @@ export function SettingsModal({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-medium text-[#666173] dark:text-[#A7A2B8] mb-1.5">
                 Reminder style
@@ -352,7 +355,7 @@ export function SettingsModal({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-medium text-[#666173] dark:text-[#A7A2B8] mb-1.5">
                 Wake up
@@ -379,14 +382,14 @@ export function SettingsModal({
 
           {/* Cute Alarm Settings */}
           <div className="pt-3 border-t border-[#EEEAF8] dark:border-[#2C2740] space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
               <p className="text-xs font-semibold uppercase tracking-wide text-[#7657D5] dark:text-[#B9A7F5]">
                 Alarm &amp; Chime
               </p>
               <button
                 type="button"
                 onClick={() => setSoundEnabled((v) => !v)}
-                className="min-h-[34px] inline-flex items-center gap-1.5 px-3 py-1 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium"
+                className="min-h-[40px] inline-flex items-center gap-1.5 px-3 py-1 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium"
               >
                 {soundEnabled ? (
                   <Volume2 className="w-3.5 h-3.5 text-[#7657D5]" />
@@ -404,7 +407,7 @@ export function SettingsModal({
                 return (
                   <div
                     key={tone.id}
-                    className={`flex items-center justify-between gap-3 p-3 rounded-2xl border transition-colors ${
+                    className={`flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 p-3 rounded-2xl border transition-colors ${
                       selected
                         ? 'border-[#7657D5] bg-[#EAE4FF]/55 dark:bg-[#2B2444] dark:border-[#9E84EE]'
                         : 'border-[#E6E1F2] dark:border-[#2C2740] bg-[#FAF9FC] dark:bg-[#12101A]'
@@ -413,7 +416,7 @@ export function SettingsModal({
                     <button
                       type="button"
                       onClick={() => setAlarmTone(tone.id)}
-                      className="flex-1 text-left min-w-0 flex items-center gap-2.5"
+                      className="flex-1 min-h-[40px] text-left min-w-0 flex items-center gap-2.5"
                     >
                       <span
                         className={`w-5 h-5 rounded-full flex items-center justify-center border shrink-0 ${
@@ -438,7 +441,7 @@ export function SettingsModal({
                       type="button"
                       onClick={() => handlePreviewTone(tone.id)}
                       aria-label={`Preview ${tone.label}`}
-                      className="min-h-[34px] inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] hover:bg-[#EAE4FF]/40 dark:hover:bg-[#241F35] text-xs font-medium shrink-0"
+                      className="min-h-[40px] inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] hover:bg-[#EAE4FF]/40 dark:hover:bg-[#241F35] text-xs font-medium shrink-0"
                     >
                       <Play className="w-3 h-3 text-[#7657D5]" />
                       <span>Preview</span>
@@ -479,7 +482,7 @@ export function SettingsModal({
                   <button
                     type="button"
                     onClick={() => setAlarmIntensity('gentle')}
-                    className={`min-h-[32px] rounded-xl text-xs font-medium transition-colors ${
+                    className={`min-h-[40px] rounded-xl text-xs font-medium transition-colors ${
                       alarmIntensity === 'gentle'
                         ? 'bg-[#EAE4FF] text-[#4C32A8] dark:bg-[#2B2444] dark:text-[#EAE4FF]'
                         : 'bg-white dark:bg-[#1A1726] text-[#666173] dark:text-[#A7A2B8]'
@@ -490,7 +493,7 @@ export function SettingsModal({
                   <button
                     type="button"
                     onClick={() => setAlarmIntensity('firm')}
-                    className={`min-h-[32px] rounded-xl text-xs font-medium transition-colors ${
+                    className={`min-h-[40px] rounded-xl text-xs font-medium transition-colors ${
                       alarmIntensity === 'firm'
                         ? 'bg-[#7657D5] text-white'
                         : 'bg-white dark:bg-[#1A1726] text-[#666173] dark:text-[#A7A2B8]'
@@ -507,7 +510,7 @@ export function SettingsModal({
               <button
                 type="button"
                 onClick={handleTestMyAlarm}
-                className="min-h-[40px] inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#EAE4FF] hover:bg-[#DDD3FF] dark:bg-[#2B2444] dark:hover:bg-[#372E56] text-[#4C32A8] dark:text-[#EAE4FF] text-xs font-semibold transition-colors"
+                className="min-h-[44px] inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#EAE4FF] hover:bg-[#DDD3FF] dark:bg-[#2B2444] dark:hover:bg-[#372E56] text-[#4C32A8] dark:text-[#EAE4FF] text-xs font-semibold transition-colors"
               >
                 <BellRing className="w-3.5 h-3.5" />
                 <span>Test my alarm</span>
@@ -517,7 +520,7 @@ export function SettingsModal({
                 <button
                   type="button"
                   onClick={requestNotif}
-                  className="min-h-[40px] inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium"
+                  className="min-h-[44px] inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium"
                 >
                   <Bell className="w-3.5 h-3.5 text-[#7657D5]" />
                   <span>
@@ -553,7 +556,7 @@ export function SettingsModal({
                     onLoadSampleData();
                     onClose();
                   }}
-                  className="min-h-[40px] inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#EAE4FF]/70 hover:bg-[#EAE4FF] dark:bg-[#2B2444] dark:hover:bg-[#372E56] text-[#4C32A8] dark:text-[#EAE4FF] text-xs font-medium"
+                  className="min-h-[44px] inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#EAE4FF]/70 hover:bg-[#EAE4FF] dark:bg-[#2B2444] dark:hover:bg-[#372E56] text-[#4C32A8] dark:text-[#EAE4FF] text-xs font-medium"
                 >
                   <Sparkles className="w-4 h-4" />
                   <span>Load sample reminders</span>
@@ -562,7 +565,7 @@ export function SettingsModal({
               <button
                 type="button"
                 onClick={() => void handleExport()}
-                className="min-h-[40px] inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#FAF9FC] dark:bg-[#241F35] hover:bg-[#EAE4FF]/50 dark:hover:bg-[#2E2747] border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium"
+                className="min-h-[44px] inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#FAF9FC] dark:bg-[#241F35] hover:bg-[#EAE4FF]/50 dark:hover:bg-[#2E2747] border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium"
               >
                 <Download className="w-4 h-4" />
                 <span>Export JSON</span>
@@ -570,7 +573,7 @@ export function SettingsModal({
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="min-h-[40px] inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#FAF9FC] dark:bg-[#241F35] hover:bg-[#EAE4FF]/50 dark:hover:bg-[#2E2747] border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium"
+                className="min-h-[44px] inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#FAF9FC] dark:bg-[#241F35] hover:bg-[#EAE4FF]/50 dark:hover:bg-[#2E2747] border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium"
               >
                 <Upload className="w-4 h-4" />
                 <span>Import JSON</span>
@@ -588,11 +591,11 @@ export function SettingsModal({
             {importSuccess && <p className="text-xs text-emerald-600 dark:text-emerald-400">{importSuccess}</p>}
           </div>
 
-          <div className="pt-2 border-t border-[#EEEAF8] dark:border-[#2C2740] flex items-center justify-between gap-3">
+          <div className="pt-2 border-t border-[#EEEAF8] dark:border-[#2C2740] flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3">
             <button
               type="button"
               onClick={onRequestResetAll}
-              className="min-h-[40px] inline-flex items-center gap-1.5 text-xs text-rose-600 dark:text-rose-400 hover:underline"
+              className="min-h-[44px] inline-flex items-center justify-center sm:justify-start gap-1.5 text-xs text-rose-600 dark:text-rose-400 hover:underline"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>{user ? 'Clear all account data' : 'Clear all local data'}</span>
@@ -600,7 +603,7 @@ export function SettingsModal({
 
             <button
               type="submit"
-              className="min-h-[44px] px-6 py-2 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] text-white text-sm font-medium transition-colors"
+              className="min-h-[44px] w-full sm:w-auto px-6 py-2 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] text-white text-sm font-medium transition-colors"
             >
               Save changes
             </button>

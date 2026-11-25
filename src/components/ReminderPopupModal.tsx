@@ -88,14 +88,14 @@ export function ReminderPopupModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#24212B]/65 backdrop-blur-md p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#24212B]/65 backdrop-blur-md p-4 overflow-x-hidden overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-labelledby="reminder-popup-title"
     >
       <div className="relative w-full max-w-md my-auto flex items-center justify-center">
         {/* Confetti-style sparkles on entrance */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-visible" aria-hidden="true">
+        <div className="pointer-events-none fixed inset-0 flex items-center justify-center overflow-hidden" aria-hidden="true">
           {SPARKLES.map((sp, idx) => (
             <motion.span
               key={idx}
@@ -136,7 +136,7 @@ export function ReminderPopupModal({
             type="button"
             onClick={onDismiss}
             aria-label="Close alarm popup"
-            className="absolute right-4 top-4 min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#24212B] dark:hover:text-[#F5F3FA] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35]"
+            className="absolute right-4 top-4 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#24212B] dark:hover:text-[#F5F3FA] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35]"
           >
             <X className="w-4 h-4" />
           </button>
@@ -253,33 +253,33 @@ export function ReminderPopupModal({
               <button
                 type="button"
                 onClick={() => snoozeMinutes(10, '10 min')}
-                className="min-h-[38px] px-2 py-1.5 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] transition-colors"
+                className="min-h-[44px] sm:min-h-[38px] px-2 py-1.5 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] transition-colors"
               >
                 10 min
               </button>
               <button
                 type="button"
                 onClick={() => snoozeMinutes(60, '1 hr')}
-                className="min-h-[38px] px-2 py-1.5 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] transition-colors"
+                className="min-h-[44px] sm:min-h-[38px] px-2 py-1.5 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] transition-colors"
               >
                 1 hr
               </button>
               <button
                 type="button"
                 onClick={() => onSnooze(item, tomorrowMorningIso(userProfile.wakeTime), 'Tomorrow')}
-                className="min-h-[38px] px-2 py-1.5 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] transition-colors"
+                className="min-h-[44px] sm:min-h-[38px] px-2 py-1.5 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] text-xs font-medium hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] transition-colors"
               >
                 Tomorrow
               </button>
             </div>
 
             {showCustom && (
-              <div className="flex items-center gap-2 pt-1">
+              <div className="flex flex-wrap items-center gap-2 pt-1">
                 <input
                   type="datetime-local"
                   value={customDateTime}
                   onChange={(e) => setCustomDateTime(e.target.value)}
-                  className="flex-1 h-10 px-3 rounded-xl bg-[#FAF9FC] dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] font-mono text-xs"
+                  className="flex-1 min-w-[180px] h-11 px-3 rounded-xl bg-[#FAF9FC] dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] font-mono text-xs"
                 />
                 <button
                   type="button"
@@ -288,7 +288,7 @@ export function ReminderPopupModal({
                     void unlockAudio();
                     onSnooze(item, new Date(customDateTime).toISOString(), 'Rescheduled');
                   }}
-                  className="min-h-[40px] px-4 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] text-white text-xs font-medium whitespace-nowrap shrink-0"
+                  className="w-full sm:w-auto min-h-[44px] px-4 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] text-white text-xs font-medium whitespace-nowrap shrink-0"
                 >
                   Set time
                 </button>

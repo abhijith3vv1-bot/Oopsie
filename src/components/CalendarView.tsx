@@ -213,12 +213,12 @@ export function CalendarView({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 self-start sm:self-center">
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-center">
           {!isViewingTodayMonth && (
             <button
               type="button"
               onClick={jumpToToday}
-              className="min-h-[40px] px-4 py-2 rounded-xl bg-[#EAE4FF] hover:bg-[#DDD3FF] dark:bg-[#2B2444] dark:hover:bg-[#372E56] text-[#4C32A8] dark:text-[#EAE4FF] text-xs font-semibold transition-colors whitespace-nowrap shrink-0"
+              className="min-h-[44px] sm:min-h-[40px] px-4 py-2 rounded-xl bg-[#EAE4FF] hover:bg-[#DDD3FF] dark:bg-[#2B2444] dark:hover:bg-[#372E56] text-[#4C32A8] dark:text-[#EAE4FF] text-xs font-semibold transition-colors whitespace-nowrap shrink-0"
             >
               Jump to Today
             </button>
@@ -227,7 +227,7 @@ export function CalendarView({
             <button
               type="button"
               onClick={() => onOpenAddForDay(selectedDayIsoForModal)}
-              className="min-h-[40px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] text-white text-xs font-semibold transition-colors whitespace-nowrap shrink-0"
+              className="min-h-[44px] sm:min-h-[40px] inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] text-white text-xs font-semibold transition-colors whitespace-nowrap shrink-0"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add on day</span>
@@ -241,7 +241,7 @@ export function CalendarView({
         {/* Monthly Calendar Grid */}
         <section
           aria-label="Monthly calendar"
-          className="lg:col-span-7 rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-4 sm:p-6 space-y-4"
+          className="lg:col-span-7 rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-3.5 sm:p-6 space-y-4"
         >
           <div className="flex items-center justify-between">
             <h2 className="text-lg sm:text-xl font-semibold font-display text-[#24212B] dark:text-[#F5F3FA]">
@@ -252,7 +252,7 @@ export function CalendarView({
                 type="button"
                 onClick={() => shiftMonth(-1)}
                 aria-label="Previous month"
-                className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] text-[#24212B] dark:text-[#F5F3FA] transition-colors"
+                className="min-w-[44px] min-h-[44px] sm:min-w-[40px] sm:min-h-[40px] flex items-center justify-center rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] text-[#24212B] dark:text-[#F5F3FA] transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -260,7 +260,7 @@ export function CalendarView({
                 type="button"
                 onClick={() => shiftMonth(1)}
                 aria-label="Next month"
-                className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] text-[#24212B] dark:text-[#F5F3FA] transition-colors"
+                className="min-w-[44px] min-h-[44px] sm:min-w-[40px] sm:min-h-[40px] flex items-center justify-center rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] text-[#24212B] dark:text-[#F5F3FA] transition-colors"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -389,8 +389,8 @@ export function CalendarView({
           aria-label="Selected day agenda"
           className="lg:col-span-5 space-y-4"
         >
-          <div className="rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-5 space-y-4">
-            <div className="flex items-start justify-between gap-3">
+          <div className="rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-4 sm:p-5 space-y-4">
+            <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <p className="text-xs font-medium text-[#7657D5] dark:text-[#B9A7F5]">
                   Day schedule
@@ -410,7 +410,7 @@ export function CalendarView({
                     })
                   )
                 }
-                className="min-h-[36px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#EAE4FF]/70 hover:bg-[#EAE4FF] dark:bg-[#2B2444] dark:hover:bg-[#372E56] text-xs font-medium text-[#4C32A8] dark:text-[#EAE4FF] transition-colors shrink-0"
+                className="min-h-[44px] sm:min-h-[36px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#EAE4FF]/70 hover:bg-[#EAE4FF] dark:bg-[#2B2444] dark:hover:bg-[#372E56] text-xs font-medium text-[#4C32A8] dark:text-[#EAE4FF] transition-colors shrink-0"
               >
                 <MessageSquarePlus className="w-3.5 h-3.5" />
                 <span>Chat with Oopsie</span>
@@ -430,26 +430,26 @@ export function CalendarView({
                   month: 'short',
                   day: 'numeric',
                 })}...`}
-                className="w-full h-10 px-3 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] text-sm text-[#24212B] dark:text-[#F5F3FA] placeholder:text-[#8E899E] focus:outline-none focus:ring-2 focus:ring-[#7657D5]/30"
+                className="w-full h-11 sm:h-10 px-3 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] text-sm text-[#24212B] dark:text-[#F5F3FA] placeholder:text-[#8E899E] focus:outline-none focus:ring-2 focus:ring-[#7657D5]/30"
               />
               <div className="flex flex-wrap items-center gap-2">
                 <input
                   type="time"
                   value={quickTime}
                   onChange={(e) => setQuickTime(e.target.value)}
-                  className="h-9 px-2.5 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] font-mono text-xs text-[#24212B] dark:text-[#F5F3FA]"
+                  className="h-11 sm:h-9 px-2.5 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] font-mono text-xs text-[#24212B] dark:text-[#F5F3FA]"
                 />
                 <input
                   type="text"
                   value={quickPerson}
                   onChange={(e) => setQuickPerson(e.target.value)}
                   placeholder="Person (optional)"
-                  className="flex-1 min-w-[110px] h-9 px-2.5 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] text-xs text-[#24212B] dark:text-[#F5F3FA] placeholder:text-[#8E899E] focus:outline-none focus:ring-2 focus:ring-[#7657D5]/30"
+                  className="flex-1 min-w-[120px] h-11 sm:h-9 px-2.5 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] text-xs text-[#24212B] dark:text-[#F5F3FA] placeholder:text-[#8E899E] focus:outline-none focus:ring-2 focus:ring-[#7657D5]/30"
                 />
                 <button
                   type="submit"
                   disabled={!quickTitle.trim()}
-                  className="min-h-[36px] inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] disabled:opacity-40 text-white text-xs font-medium transition-colors whitespace-nowrap shrink-0"
+                  className="w-full sm:w-auto min-h-[44px] sm:min-h-[36px] inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#7657D5] hover:bg-[#6546C4] disabled:opacity-40 text-white text-xs font-medium transition-colors whitespace-nowrap shrink-0"
                 >
                   <CalendarPlus className="w-3.5 h-3.5" />
                   <span>Schedule</span>

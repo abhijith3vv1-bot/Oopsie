@@ -61,24 +61,24 @@ export function ConfirmDialog({
             type="button"
             onClick={onCancel}
             aria-label="Close confirmation"
-            className="min-w-[36px] min-h-[36px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#24212B] dark:hover:text-[#F5F3FA] hover:bg-[#FAF9FC] dark:hover:bg-[#2B2444] shrink-0"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#24212B] dark:hover:text-[#F5F3FA] hover:bg-[#FAF9FC] dark:hover:bg-[#2B2444] shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="flex items-center justify-end gap-2.5 pt-1">
+        <div className="flex flex-wrap items-center justify-end gap-2.5 pt-1">
           <button
             type="button"
             onClick={onCancel}
-            className="min-h-[42px] px-4 py-2 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] hover:bg-[#FAF9FC] dark:hover:bg-[#2B2444] text-sm font-medium text-[#24212B] dark:text-[#F5F3FA] transition-colors"
+            className="min-h-[44px] px-4 py-2 rounded-xl border border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] hover:bg-[#FAF9FC] dark:hover:bg-[#2B2444] text-sm font-medium text-[#24212B] dark:text-[#F5F3FA] transition-colors"
           >
             {cancelLabel}
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className={`min-h-[42px] px-4 py-2 rounded-xl text-sm font-semibold text-white transition-colors ${
+            className={`min-h-[44px] px-4 py-2 rounded-xl text-sm font-semibold text-white transition-colors ${
               destructive
                 ? 'bg-[#D9534F] hover:bg-[#c54440]'
                 : 'bg-[#7657D5] hover:bg-[#6445C5]'

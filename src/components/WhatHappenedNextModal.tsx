@@ -305,8 +305,13 @@ export function WhatHappenedNextModal({
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 18, scale: 0.97 }}
         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full sm:max-w-xl rounded-t-3xl sm:rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] shadow-2xl overflow-hidden max-h-[92vh] flex flex-col"
+        className="relative w-full sm:max-w-xl rounded-t-3xl sm:rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] shadow-2xl overflow-hidden max-h-[92dvh] flex flex-col"
       >
+        {/* Drag handle on mobile */}
+        <div className="sm:hidden pt-3 flex justify-center">
+          <span className="w-10 h-1.5 rounded-full bg-[#E6E1F2] dark:bg-[#2C2740]" />
+        </div>
+
         {/* Top bar */}
         <div className="px-5 sm:px-6 py-4 border-b border-[#EFEBF7] dark:border-[#2C2740] flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
@@ -329,17 +334,17 @@ export function WhatHappenedNextModal({
             type="button"
             onClick={onClose}
             aria-label="Close follow-up check-in"
-            className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#24212B] dark:hover:text-[#F5F3FA] hover:bg-[#FAF9FC] dark:hover:bg-[#2B2444] shrink-0"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#24212B] dark:hover:text-[#F5F3FA] hover:bg-[#FAF9FC] dark:hover:bg-[#2B2444] shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="p-5 sm:p-6 overflow-y-auto space-y-5">
+        <div className="p-5 sm:p-6 pb-[calc(1.25rem+env(safe-area-inset-bottom))] sm:pb-6 overflow-y-auto space-y-5">
           {celebrating ? (
-            <div className="relative py-4 text-center space-y-5">
+            <div className="relative overflow-hidden py-4 text-center space-y-5">
               {/* Celebration confetti dots */}
-              <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden="true">
+              <div className="pointer-events-none absolute inset-0 overflow-hidden flex items-center justify-center" aria-hidden="true">
                 {CELEBRATION_DOTS.map((dot, idx) => (
                   <motion.span
                     key={idx}
@@ -380,7 +385,7 @@ export function WhatHappenedNextModal({
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2.5">
+              <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5">
                 <button
                   type="button"
                   onClick={onClose}
@@ -529,7 +534,7 @@ export function WhatHappenedNextModal({
                         </label>
                         <textarea
                           rows={2}
-                          autoFocus
+                          autoFocus={typeof window !== 'undefined' && window.innerWidth >= 640}
                           value={newConversationNote}
                           onChange={(e) => setNewConversationNote(e.target.value)}
                           placeholder="e.g., Vendor requested one more day to confirm shipping rates."
@@ -548,13 +553,13 @@ export function WhatHappenedNextModal({
                           value={waitingNote}
                           onChange={(e) => setWaitingNote(e.target.value)}
                           placeholder="Optional quick note (e.g., Sent polite ping on Slack)"
-                          className="w-full h-10 px-3 rounded-xl bg-white dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] text-xs text-[#24212B] dark:text-[#F5F3FA]"
+                          className="w-full h-11 px-3 rounded-xl bg-white dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] text-xs text-[#24212B] dark:text-[#F5F3FA]"
                         />
                       </div>
                     )}
 
                     {selected === 'follow_up_again' && (
-                      <div className="flex items-center gap-2 text-xs text-[#24212B] dark:text-[#F5F3FA]">
+                      <div className="flex flex-wrap items-center gap-2 text-xs text-[#24212B] dark:text-[#F5F3FA]">
                         <Sparkles className="w-3.5 h-3.5 text-[#7657D5] shrink-0" />
                         <span>Repeat every</span>
                         <input
@@ -564,7 +569,7 @@ export function WhatHappenedNextModal({
                           value={recurringDays}
                           onChange={(e) => setRecurringDays(e.target.value)}
                           placeholder="2"
-                          className="w-14 h-8 px-2 rounded-lg bg-white dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] font-mono text-center"
+                          className="w-14 h-9 px-2 rounded-lg bg-white dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] font-mono text-center"
                         />
                         <span>days until resolved (optional)</span>
                       </div>
@@ -585,7 +590,7 @@ export function WhatHappenedNextModal({
                             key={btn.id}
                             type="button"
                             onClick={() => setSchedulePreset(btn.id)}
-                            className={`min-h-[38px] px-2.5 py-1.5 rounded-xl border text-xs font-medium transition-colors ${
+                            className={`min-h-[44px] px-2.5 py-1.5 rounded-xl border text-xs font-medium transition-colors ${
                               schedulePreset === btn.id
                                 ? 'bg-[#7657D5] border-[#7657D5] text-white'
                                 : 'bg-white dark:bg-[#1A1726] border-[#E6E1F2] dark:border-[#2C2740] text-[#24212B] dark:text-[#F5F3FA]'
@@ -636,7 +641,7 @@ export function WhatHappenedNextModal({
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
-                    className="rounded-2xl bg-[#FAF9FC] dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] p-4 flex items-center justify-between gap-3"
+                    className="rounded-2xl bg-[#FAF9FC] dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
                   >
                     <p className="text-xs text-[#666173] dark:text-[#A7A2B8]">
                       Oopsie will close this reminder and preserve its conversation timeline.
@@ -644,7 +649,7 @@ export function WhatHappenedNextModal({
                     <button
                       type="button"
                       onClick={handleConfirmNotRequired}
-                      className="min-h-[40px] px-4 py-2 rounded-xl bg-[#24212B] dark:bg-[#EAE4FF] text-white dark:text-[#24212B] text-xs font-semibold whitespace-nowrap shrink-0"
+                      className="min-h-[44px] w-full sm:w-auto px-4 py-2 rounded-xl bg-[#24212B] dark:bg-[#EAE4FF] text-white dark:text-[#24212B] text-xs font-semibold whitespace-nowrap shrink-0"
                     >
                       Close reminder
                     </button>

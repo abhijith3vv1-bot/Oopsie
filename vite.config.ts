@@ -14,7 +14,7 @@ export default defineConfig(() => {
         strategies: 'injectManifest',
         srcDir: 'src',
         filename: 'sw.ts',
-        registerType: 'autoUpdate',
+        registerType: 'prompt',
         injectManifest: {
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         },
@@ -27,7 +27,7 @@ export default defineConfig(() => {
         ],
         manifest: {
           id: '/',
-          name: 'Oopsie: Oops I forgot',
+          name: 'Oopsie',
           short_name: 'Oopsie',
           description:
             'Your playful, reliable second brain that remembers everything for you, rings gently when due, and follows up until every loop is closed.',

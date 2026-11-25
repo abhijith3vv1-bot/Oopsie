@@ -311,7 +311,7 @@ export function AddReminderModal({
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.98 }}
         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full sm:max-w-xl rounded-t-3xl sm:rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] shadow-2xl overflow-hidden max-h-[92vh] flex flex-col"
+        className="w-full sm:max-w-xl rounded-t-3xl sm:rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] shadow-2xl overflow-hidden max-h-[92dvh] flex flex-col"
       >
         {/* Drag handle on mobile */}
         <div className="sm:hidden pt-3 flex justify-center">
@@ -320,9 +320,9 @@ export function AddReminderModal({
 
         {/* Header */}
         <div className="px-5 sm:px-6 py-4 border-b border-[#EFEBF7] dark:border-[#2C2740] flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             <AssistantOrb mood={parsingQuick ? 'thinking' : 'idle'} size="sm" />
-            <div>
+            <div className="min-w-0">
               <h2
                 id="add-reminder-title"
                 className="text-base sm:text-lg font-semibold font-display text-[#24212B] dark:text-[#F5F3FA]"
@@ -339,7 +339,7 @@ export function AddReminderModal({
             type="button"
             onClick={onClose}
             aria-label="Close new reminder dialog"
-            className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#24212B] dark:hover:text-[#F5F3FA] hover:bg-[#FAF9FC] dark:hover:bg-[#2B2444]"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-[#666173] hover:text-[#24212B] dark:hover:text-[#F5F3FA] hover:bg-[#FAF9FC] dark:hover:bg-[#2B2444] shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
@@ -351,7 +351,7 @@ export function AddReminderModal({
             <button
               type="button"
               onClick={() => setMode('conversational')}
-              className={`min-h-[38px] inline-flex items-center justify-center gap-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap ${
+              className={`min-h-[44px] inline-flex items-center justify-center gap-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap ${
                 mode === 'conversational'
                   ? 'bg-white dark:bg-[#241F35] text-[#7657D5] dark:text-[#C5B4FF] shadow-sm'
                   : 'text-[#666173] dark:text-[#A7A2B8] hover:text-[#24212B] dark:hover:text-[#F5F3FA]'
@@ -363,7 +363,7 @@ export function AddReminderModal({
             <button
               type="button"
               onClick={() => setMode('structured')}
-              className={`min-h-[38px] inline-flex items-center justify-center gap-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap ${
+              className={`min-h-[44px] inline-flex items-center justify-center gap-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap ${
                 mode === 'structured'
                   ? 'bg-white dark:bg-[#241F35] text-[#7657D5] dark:text-[#C5B4FF] shadow-sm'
                   : 'text-[#666173] dark:text-[#A7A2B8] hover:text-[#24212B] dark:hover:text-[#F5F3FA]'
@@ -375,7 +375,7 @@ export function AddReminderModal({
           </div>
         </div>
 
-        <div className="p-5 sm:p-6 overflow-y-auto space-y-5">
+        <div className="p-5 sm:p-6 pb-[calc(1.25rem+env(safe-area-inset-bottom))] sm:pb-6 overflow-y-auto space-y-5">
           {mode === 'conversational' ? (
             <div className="space-y-4">
               <div>
@@ -388,7 +388,7 @@ export function AddReminderModal({
                 <textarea
                   id="quick-add-textarea"
                   rows={3}
-                  autoFocus
+                  autoFocus={typeof window !== 'undefined' && window.innerWidth >= 640}
                   value={quickInput}
                   onChange={(e) => setQuickInput(e.target.value)}
                   placeholder="Remind me to follow up with Rahul about the quotation if he doesn't send it by Friday."
@@ -479,7 +479,7 @@ export function AddReminderModal({
                 <input
                   type="text"
                   required
-                  autoFocus
+                  autoFocus={typeof window !== 'undefined' && window.innerWidth >= 640}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g., Follow up with Rahul about the Q4 quotation"
@@ -537,7 +537,7 @@ export function AddReminderModal({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
                   <label className="block text-xs font-semibold text-[#24212B] dark:text-[#F5F3FA] mb-1.5">
                     Category
@@ -573,15 +573,15 @@ export function AddReminderModal({
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-1.5">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
                   <label className="text-xs font-semibold text-[#24212B] dark:text-[#F5F3FA]">
                     Date &amp; time
                   </label>
-                  <div className="flex items-center gap-2 text-[11px]">
+                  <div className="flex flex-wrap items-center gap-1.5 text-xs">
                     <button
                       type="button"
                       onClick={() => setPresetHours(3)}
-                      className="text-[#7657D5] dark:text-[#C5B4FF] hover:underline"
+                      className="min-h-[36px] px-2 text-[#7657D5] dark:text-[#C5B4FF] hover:underline"
                     >
                       In 3h
                     </button>
@@ -589,7 +589,7 @@ export function AddReminderModal({
                     <button
                       type="button"
                       onClick={() => setPresetHours(24)}
-                      className="text-[#7657D5] dark:text-[#C5B4FF] hover:underline"
+                      className="min-h-[36px] px-2 text-[#7657D5] dark:text-[#C5B4FF] hover:underline"
                     >
                       Tomorrow
                     </button>
@@ -597,7 +597,7 @@ export function AddReminderModal({
                     <button
                       type="button"
                       onClick={() => setDueLocal(inferUpcomingFridayLocal())}
-                      className="text-[#7657D5] dark:text-[#C5B4FF] hover:underline"
+                      className="min-h-[36px] px-2 text-[#7657D5] dark:text-[#C5B4FF] hover:underline"
                     >
                       Friday AM
                     </button>
@@ -617,11 +617,11 @@ export function AddReminderModal({
                 <span className="block text-xs font-semibold text-[#24212B] dark:text-[#F5F3FA]">
                   Follow-up trigger type
                 </span>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setTriggerType('time')}
-                    className={`min-h-[40px] inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-medium transition-colors ${
+                    className={`min-h-[44px] inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-medium transition-colors ${
                       triggerType === 'time'
                         ? 'border-[#7657D5] bg-[#EAE4FF]/70 dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF]'
                         : 'border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] text-[#666173] dark:text-[#A7A2B8]'
@@ -633,7 +633,7 @@ export function AddReminderModal({
                   <button
                     type="button"
                     onClick={() => setTriggerType('condition')}
-                    className={`min-h-[40px] inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-medium transition-colors ${
+                    className={`min-h-[44px] inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-medium transition-colors ${
                       triggerType === 'condition'
                         ? 'border-[#7657D5] bg-[#EAE4FF]/70 dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF]'
                         : 'border-[#E6E1F2] dark:border-[#2C2740] bg-white dark:bg-[#1A1726] text-[#666173] dark:text-[#A7A2B8]'
@@ -651,9 +651,9 @@ export function AddReminderModal({
                       value={conditionDesc}
                       onChange={(e) => setConditionDesc(e.target.value)}
                       placeholder="e.g., If Rahul hasn't sent the quotation by Friday"
-                      className="w-full h-10 px-3 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] text-xs text-[#24212B] dark:text-[#F5F3FA]"
+                      className="w-full h-11 px-3 rounded-xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] text-xs text-[#24212B] dark:text-[#F5F3FA]"
                     />
-                    <div className="flex items-center gap-2 text-xs text-[#666173] dark:text-[#A7A2B8]">
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-[#666173] dark:text-[#A7A2B8]">
                       <span>Auto-check every</span>
                       <input
                         type="number"
@@ -662,13 +662,13 @@ export function AddReminderModal({
                         value={intervalDays}
                         onChange={(e) => setIntervalDays(e.target.value)}
                         placeholder="2"
-                        className="w-16 h-8 px-2 rounded-lg bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] font-mono text-center text-[#24212B] dark:text-[#F5F3FA]"
+                        className="w-16 h-9 px-2 rounded-lg bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] font-mono text-center text-[#24212B] dark:text-[#F5F3FA]"
                       />
                       <span>days if still pending</span>
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-2 text-xs text-[#666173] dark:text-[#A7A2B8]">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-[#666173] dark:text-[#A7A2B8]">
                     <span>Optional repeat interval: every</span>
                     <input
                       type="number"
@@ -677,7 +677,7 @@ export function AddReminderModal({
                       value={intervalDays}
                       onChange={(e) => setIntervalDays(e.target.value)}
                       placeholder="0"
-                      className="w-16 h-8 px-2 rounded-lg bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] font-mono text-center text-[#24212B] dark:text-[#F5F3FA]"
+                      className="w-16 h-9 px-2 rounded-lg bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] font-mono text-center text-[#24212B] dark:text-[#F5F3FA]"
                     />
                     <span>days (leave blank for one-time)</span>
                   </div>
@@ -689,7 +689,7 @@ export function AddReminderModal({
                   Additional notes (optional)
                 </label>
                 <div className="relative">
-                  <MessageSquare className="w-4 h-4 text-[#8E889C] absolute left-3 top-3" />
+                  <MessageSquare className="w-4 h-4 text-[#8E889C] absolute left-3 top-3.5" />
                   <input
                     type="text"
                     value={notes}
@@ -700,7 +700,7 @@ export function AddReminderModal({
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-2">
+              <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-2">
                 <button
                   type="button"
                   onClick={onClose}
@@ -710,7 +710,7 @@ export function AddReminderModal({
                 </button>
                 <button
                   type="submit"
-                  className="min-h-[44px] inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#7657D5] hover:bg-[#6445C5] text-white text-sm font-semibold transition-colors"
+                  className="min-h-[44px] inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#7657D5] hover:bg-[#6445C5] text-white text-sm font-semibold transition-colors"
                 >
                   <Check className="w-4 h-4" />
                   <span>Save reminder</span>

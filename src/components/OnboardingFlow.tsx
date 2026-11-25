@@ -54,8 +54,8 @@ export function OnboardingFlow({ initialProfile, onComplete }: OnboardingFlowPro
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-[#FAF9FC] dark:bg-[#12101A] text-[#24212B] dark:text-[#F5F3FA]">
-      <div className="w-full max-w-lg rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-6 sm:p-8 shadow-sm">
+    <div className="min-h-[100dvh] flex items-center justify-center px-4 pt-[max(2rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))] bg-[#FAF9FC] dark:bg-[#12101A] text-[#24212B] dark:text-[#F5F3FA]">
+      <div className="w-full max-w-lg rounded-3xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-5 sm:p-8 shadow-sm">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3.5">
             <AssistantOrb mood={step === 3 ? 'happy' : 'idle'} size="md" />
@@ -106,7 +106,7 @@ export function OnboardingFlow({ initialProfile, onComplete }: OnboardingFlowPro
                 <input
                   id="onboard-name"
                   type="text"
-                  autoFocus
+                  autoFocus={typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   onKeyDown={(e) => {
@@ -273,7 +273,7 @@ export function OnboardingFlow({ initialProfile, onComplete }: OnboardingFlowPro
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div className="p-4 rounded-2xl bg-[#FAF9FC] dark:bg-[#12101A] border border-[#E6E1F2] dark:border-[#2C2740]">
                   <label htmlFor="wake-time" className="flex items-center gap-2 text-xs font-medium text-[#666173] dark:text-[#A7A2B8] mb-2">
                     <Sun className="w-4 h-4 text-amber-500" />

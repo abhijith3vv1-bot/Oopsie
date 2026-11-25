@@ -207,7 +207,7 @@ export function InsightsView({ items, liveNow, onOpenPerson }: InsightsViewProps
             Follow-up closure rate
           </h2>
 
-          <div className="flex items-center gap-5">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
             <div className="relative w-28 h-28 shrink-0 flex items-center justify-center">
               <svg className="w-28 h-28 -rotate-90" viewBox="0 0 100 100">
                 <circle
@@ -288,12 +288,12 @@ export function InsightsView({ items, liveNow, onOpenPerson }: InsightsViewProps
           </div>
         </div>
 
-        <div className="lg:col-span-7 rounded-2xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-5 space-y-5">
-          <div className="flex items-center justify-between">
+        <div className="lg:col-span-7 rounded-2xl bg-white dark:bg-[#1A1726] border border-[#E6E1F2] dark:border-[#2C2740] p-4 sm:p-5 space-y-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-sm font-semibold font-display text-[#24212B] dark:text-[#F5F3FA]">
               Last 7 days activity
             </h2>
-            <div className="flex items-center gap-4 text-xs text-[#666173] dark:text-[#A7A2B8]">
+            <div className="flex flex-wrap items-center gap-3 text-xs text-[#666173] dark:text-[#A7A2B8]">
               <span className="inline-flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-sm bg-[#7657D5]" />
                 Created
@@ -305,12 +305,12 @@ export function InsightsView({ items, liveNow, onOpenPerson }: InsightsViewProps
             </div>
           </div>
 
-          <div className="h-52 flex items-end justify-between gap-2 pt-4">
+          <div className="h-52 flex items-end justify-between gap-1.5 sm:gap-2 pt-4">
             {stats.days.map((d) => {
               const createdPct = Math.round((d.created / stats.maxDayBar) * 100);
               const completedPct = Math.round((d.completed / stats.maxDayBar) * 100);
               return (
-                <div key={d.key} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                <div key={d.key} className="flex-1 min-w-0 flex flex-col items-center gap-2 h-full justify-end">
                   <div className="w-full flex items-end justify-center gap-1.5 h-40">
                     <div
                       title={`${d.label}: ${d.created} created`}
@@ -359,7 +359,7 @@ export function InsightsView({ items, liveNow, onOpenPerson }: InsightsViewProps
                 key={p.key}
                 type="button"
                 onClick={() => onOpenPerson(p.key)}
-                className="w-full py-3 flex items-center justify-between gap-3 text-left hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] px-2 -mx-2 rounded-xl transition-colors"
+                className="w-full min-h-[48px] py-3 flex items-center justify-between gap-3 text-left hover:bg-[#FAF9FC] dark:hover:bg-[#241F35] px-2 -mx-2 rounded-xl transition-colors"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <span className="w-8 h-8 rounded-full bg-[#EAE4FF] dark:bg-[#2B2444] text-[#7657D5] dark:text-[#C5B4FF] text-xs font-semibold flex items-center justify-center shrink-0">
